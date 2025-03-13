@@ -2,7 +2,11 @@
 
 # Revolutionize Your Development Process with Cutting-Edge Front-End Automation
 
-Discover the future of software development with our groundbreaking platform, engineered to **completely automate Razor front-end creation**. This innovative technology allows development teams to focus on the core backend libraries and critical application functionalities, while the front-end is built seamlessly and effortlessly.
+Discover the future of software development with our groundbreaking platform, engineered to **completely automate Blazor front-end creation**. This innovative technology allows development teams to focus on the core backend libraries and critical application functionalities, while the front-end is built seamlessly and effortlessly.
+
+## killer feature
+
+Automatic GUI (front-end) generator for Blazor. A powerful analyzer automatically creates the front-end with all panels and user interaction fields, analyzes the code in the back-end and automates all the client-side development work
 
 ## How It Works
 Harnessing the power of **state-of-the-art AI algorithms**, our platform analyzes backend assemblies and dynamically generates the complete front-end architecture on the fly. Not only that, but it also establishes all communication pipelines between the back end and front end, ensuring a cohesive and efficient development process.
