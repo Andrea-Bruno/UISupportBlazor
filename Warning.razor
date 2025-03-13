@@ -1,0 +1,19 @@
+﻿@if (!Hidden)
+{
+    <div class="alert alert-secondary mt-4" role="alert">
+        <span class="badge badge-danger">@Title</span>
+        <span class="mr-2" aria-hidden="true">
+            @((MarkupString)UISupportGeneric.Util.GetIcon(UISupportGeneric.Icons.OpenIonic.warning, "width: 1em; height: 1em; vertical-align: -0.125em; fill: currentColor; display: inline-block;"))
+        </span>
+        <div style="white-space: pre-wrap; overflow-wrap: anywhere">@Message</div>
+    </div>
+}
+@code {
+    [Parameter]
+    public string? Title { get; set; }
+    [Parameter]
+    public string? Message { get; set; }
+    [Parameter]
+    public bool Hidden { get; set; } = true;
+
+}

@@ -1,0 +1,136 @@
+﻿@*
+    // Help to use style class for bootstrap: https://www.w3schools.com/bootstrap/bootstrap_ref_all_classes.asp
+*@
+@using static UISupportGeneric.Util
+@using UISupportGeneric.UI
+@using UISupportGeneric.Resources
+@{
+    Info ??= ObjectToEdit == null ? null : GetClassInfo(ObjectToEdit, InterfaceType, SaveAction);
+
+    var container = Level == 0 ? "" : "card my-3";
+    var title = Level == 0 ? "h1" : "card-header";
+    var body = Level == 0 ? "" : "card-body";
+}
+<div class="@container">
+    <div class="@title">
+        @Info?.Label
+    </div>
+    <div class="@body">
+        @if (Info?.Description != null)
+        {
+            <div class="lead" style="white-space: pre-wrap; overflow-wrap: anywhere">@Info.Description</div>
+        }
+        @if (Info != null)
+        {
+            foreach (var element in Info.Elements)
+            {
+                if (element is MethodUISupport method)
+                {
+                    var fieldsetClass = method.Parameters.Count > 0 ? "container panel panel-default border my-3" : "";
+                    <fieldset class=@fieldsetClass>
+                        @if (method.Parameters.Count != 0)
+                        {
+                            <p class="h5">@method.Description</p>
+                        }
+                        @foreach (var parameter in method.Parameters)
+                        {
+                            <ObjectMember EditableMember="@parameter" RefreshContainer="@Refresh"></ObjectMember>
+                        }
+                        <button class="btn btn-primary my-1" type="submit" @onclick=@method.Execute>@method.Label</button>
+                        @if (method.Parameters.Count == 0)
+                        {
+                            <Tooltip Text="@method.Description"></Tooltip>
+                        }
+                        @if (method.TableResult != null)
+                        {
+                            <ObjectArray Array="@method.TableResult" RefreshContainer="@Refresh"></ObjectArray>
+                        }
+                        else
+                        {
+                            <Message Hidden="@(!method.ShowResult)" Success="@method.Successful" Title="@Dictionary.Result" Text="@(method.Successful ? method.Result : method.Error)" Tooltip="@method.Tooltip"></Message>
+                        }
+                    </fieldset>
+                }
+                else if (element is PropertyUISupport property)
+                {
+                    <ObjectMember EditableMember="@property" RefreshContainer="@Refresh"></ObjectMember>
+                }
+                else if (element is TableUISupport array)
+                {
+                    <ObjectArray Array="@array" RefreshContainer="@Refresh"></ObjectArray>
+                }
+                else if (element is ObjectsCollection objectsCollection)
+                {
+                    foreach (var obj in objectsCollection.Elements)
+                    {
+                        if (obj is ClassInfo classInfo)
+                        {
+                            <ObjectEditor ObjectToEdit="null" Info="@classInfo" InterfaceType="@InterfaceType" Level="@(Level + 1)"></ObjectEditor>
+                        }
+                        if (obj is ArrayElementPrimitiveUI arrayElementPrimitiveUI)
+                        {
+                            <ObjectMember EditableMember="@arrayElementPrimitiveUI" RefreshContainer="@Refresh"></ObjectMember>
+                        }
+                    }
+                }
+                else if (element is ClassInfo obj)
+                {
+                    <ObjectEditor ObjectToEdit="null" Info="@obj" InterfaceType="@InterfaceType" Level="@(Level + 1)">
+                    </ObjectEditor>
+                }
+            }
+        }
+    </div>
+</div>
+
+@if (Info != null && !Info.InterfaceType.HasFlag(InterfaceType.NoSubmitButton) && !Info.InterfaceType.HasFlag(InterfaceType.AutoSave))
+{
+    <button class="btn btn-primary" type="submit" @onclick=OnSubmit>@Dictionary.Submit</button>
+
+    @code {
+    private void OnSubmit(Microsoft.AspNetCore.Components.Web.MouseEventArgs e)
+    {
+        var errorLog = Info?.Submit?.Invoke();
+        if (errorLog != null)
+        {
+            TitleWarning = Dictionary.ValidationError;
+            DescriptionWarning = errorLog;
+            HiddenWarning = false;
+        }
+        else
+        {
+            HiddenWarning = true;
+        }
+    }
+
+    // private Warning? Warning;
+    private string? TitleWarning;
+    private string? DescriptionWarning;
+    private bool HiddenWarning = true;
+    }
+    <Warning Message="@DescriptionWarning" Title="@TitleWarning" Hidden="@HiddenWarning"></Warning>
+
+}
+@{
+        //Info.OnChange = Refresh;
+}
+@code {
+    private void Refresh()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+
+    [Parameter]
+    public ClassInfo? Info { get; set; }
+    // The object to edit or static class
+    [Parameter]
+    public object? ObjectToEdit { get; set; }
+    [Parameter]
+    public InterfaceType InterfaceType { get; set; } = InterfaceType.AutoSave;
+    [Parameter]
+    // Action to execute on save (a call occurs every time the edited object should be saved)
+    public ClassInfo.SaveAction? SaveAction { get; set; }
+    [Parameter]
+    public int Level { get; set; } = 0;
+}

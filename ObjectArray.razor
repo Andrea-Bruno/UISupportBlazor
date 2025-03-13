@@ -1,0 +1,69 @@
+﻿@using UISupportGeneric.UI
+@{
+    var index = 0;
+}
+@if (Array == null)
+{
+    return;
+}
+<div class="text-primary">@Array.Label</div>
+<div class="text-secondary">@Array.Description</div>
+@if (Array.IsSelector)
+{
+    <select @oninput=OnSelect>
+        <option hidden selected value="-1">...</option>
+        @foreach (var record in Array.Records)
+        {
+            @if (record != null)
+            {
+                <option value="@index" style="white-space: pre-wrap">@string.Join(',',record)</option>
+            }
+            index++;
+        }
+    </select>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                @foreach (var fieldName in Array.Titles)
+                {
+                    <th>@fieldName</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var record in Array.Records)
+            {
+                <tr>
+                    @if (record != null)
+                    {
+                        @foreach (var field in record)
+                        {
+                            <td style="white-space: pre-wrap">@field</td>
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    // Used to update the container component
+    [Parameter, EditorRequired]    
+    public Action? RefreshContainer { get; set; }
+
+    // Table data to be displayed
+    [Parameter, EditorRequired]
+    public TableUISupport? Array { get; set; }
+
+    // Handle selection change event
+    private void OnSelect(ChangeEventArgs args)
+    {
+        if (args.Value != null){
+            Array?.SetSelected(int.Parse((string)args.Value), RefreshContainer);
+        }
+    }
+}

@@ -1,0 +1,29 @@
+﻿@*
+// help:
+// https://getbootstrap.com/docs/4.1/components/tooltips/
+*@
+@{
+    id++;
+    var i = "e" + id;
+}
+@if (!String.IsNullOrEmpty(Text))
+{
+    <button @ref=bt class="btn" style="@Style cursor: help; margin-left: 0.5em !important" @onclick=Onclick onmouseover="document.getElementById('@i').style.opacity=1" onmouseout="document.getElementById('@i').style.opacity=@Show">
+        @((MarkupString)UISupportGeneric.Util.GetIcon(UISupportGeneric.Icons.OpenIonic.info, "width: 1em; height: 1em; vertical-align: -0.125em; fill: currentColor;"))
+    </button>
+    <div id="@i" class="p-2" style="white-space: pre-wrap; overflow-wrap: anywhere; min-width:min-content; display:inline; opacity:0; position:absolute; background-color:black; color:white">@Text</div>
+}
+
+@code {
+    [Parameter]
+    public string? Text { get; set; }
+    static int id;
+    private int Show = 0;
+    private string Style = "";
+    ElementReference bt;
+    void Onclick(Microsoft.AspNetCore.Components.Web.MouseEventArgs e)
+    {
+        Show = Show == 0 ? 1 : 0;
+        Style = Show == 0 ? "" : "border-style:inset !important;";
+    }
+}

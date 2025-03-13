@@ -1,0 +1,101 @@
+﻿@implements IDisposable
+@using UISupportGeneric.UI
+@using UISupportGeneric.Resources
+@{
+    // style: https://getbootstrap.com/docs/4.0/components/input-group/
+}
+
+<div class="form-group mt-1">
+    <label class="text-secondary" for="@EditableMember.Id">@EditableMember.Label</label>
+    @if (EditableMember.IsReadOnly)
+    {
+        <Tooltip Text="@EditableMember.Description"></Tooltip>
+    }
+    @if (EditableMember.SettableValues != null)
+    {
+        <select id="@EditableMember.Id" disabled="@EditableMember.IsReadOnly" value="@EditableMember.LiteralValue" @oninput=OnChange @onblur=OnBlur>
+            @foreach (var option in EditableMember.SettableValues)
+            {
+                <option value="@option.Value" selected="@option.SelectedLiteral">@option.Description</option>
+            }
+        </select>
+    }
+    else if (EditableMember.InputType == InputType.image)
+    {
+        <img src="@string.Format("data:image/png;base64,{0}",   EditableMember.ImageBase64)" />
+    }
+    else if (EditableMember.IsReadOnly && EditableMember.InputType == InputType.text)
+    {
+        <div id="@EditableMember.Id" style="white-space: pre-wrap; overflow-wrap: anywhere">@(string.IsNullOrEmpty(EditableMember.LiteralValue) ? Dictionary.Nothing : EditableMember.LiteralValue)</div>
+    }
+    else
+    {
+        var classValue = EditableMember.InputType == InputType.checkbox ? "form-check" : EditableMember.InputType == InputType.range ? "form-range" : "form-control";
+
+        var attributes = new Dictionary<string, object>();
+        if (EditableMember.Min != null)
+            attributes.Add("min", EditableMember.Min);
+        if (EditableMember.Max != null)
+            attributes.Add("max", EditableMember.Max);
+        if (EditableMember.Step != null)
+            attributes.Add("step", EditableMember.Step);
+
+        <input id="@EditableMember.Id" class="@classValue" disabled="@EditableMember.IsReadOnly" @bind-value=EditableMember.LiteralValue @oninput=OnChange @onblur=OnBlur checked="@EditableMember.IsTrue" type="@EditableMember.InputTypeText" @attributes="@attributes" />
+        if (EditableMember.InputType == InputType.range)
+        {
+            <output class="form-control">@EditableMember.LiteralValue</output>
+        }
+        @*<input id="@EditableMember.Id" class="@classValue" disabled="@EditableMember.IsReadOnly" value="@EditableMember.LiteralValue" @oninput=OnChange checked="@EditableMember.IsTrue" type="@EditableMember.InputTypeText" />*@
+    }
+    <Message Hidden="@(EditableMember.Successful)" Success="false" Title="@Dictionary.Error" Text="@EditableMember.Error" Tooltip="@EditableMember.Tooltip"></Message>
+    @if (!EditableMember.IsReadOnly)
+    {
+        <span class="text-info font-italic">@EditableMember.Description</span>
+    }
+    <br />
+    <span class="text-danger">@EditableMember.ValidationError</span>
+    @{
+        EditableMember.OnChange = Refresh;
+    }
+</div>
+@code {
+    // Used to update the container component
+    [Parameter, EditorRequired]
+    public Action? RefreshContainer { get; set; }
+
+
+    [Parameter]
+    public EditableUIMember EditableMember { get; set; }
+    /// <summary>
+    /// On Change is used for update values in real time with typing
+    /// </summary>
+    /// <param name="args">Event arguments</param>
+    private void OnChange(ChangeEventArgs args)
+    {
+        if (!EditableMember.IsReadOnly){
+            EditableMember.LiteralValue = args?.Value?.ToString();
+            Changed = true;
+        }
+
+    }
+    private bool Changed;
+    private void OnBlur(){
+        if (Changed){
+            RefreshContainer?.Invoke();
+            Changed = false;
+        }
+    }
+    public void Dispose()
+    {
+        // https://www.syncfusion.com/faq/blazor/webassembly/how-do-i-dispose-a-page-in-blazor-webassembly
+        EditableMember.UnsubscribeOnChange(Refresh);
+    }
+
+}
+@functions {
+    public void Refresh()
+    {
+        EditableMember.UnsubscribeOnChange(Refresh); // this UI element is going to be destroyed, so remove the refresh event. (Refreshed web apps create a new UI instance)
+        InvokeAsync(StateHasChanged);
+    }
+}

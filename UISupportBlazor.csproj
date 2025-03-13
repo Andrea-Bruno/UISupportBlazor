@@ -1,0 +1,61 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Version>$([System.DateTime]::Now.ToString("1.yy.MM.dd"))</Version>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Configurations>Debug;Release</Configurations>
+    <Copyright>Andrea Bruno</Copyright>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>blazor;razor,AI;automation; rapid development; code generation; GUI generation; automated design; software development; automatic user interface; assisted programming; low-code development; no-code development; dynamic framework; design tools; GUI customization; visual design; intelligent development; code optimization; rapid prototyping; AI in development; dynamic UI; development assistant; graphical interfaces; code analysis; productivity tools; software modeling; responsive design; automated workflow; drag and drop design; form generator; automatic coding; project management; developer assistant; application builder; artificial intelligence; simplified development; visual editor; template generator; process automation; layout management; assisted development; AI-driven prototyping.</PackageTags>
+    <RepositoryUrl>https://github.com/Andrea-Bruno/UISupportBlazor</RepositoryUrl>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <Description>
+      Development tool for automatic GUI creation for Blazor applications (speeds up web application development by 70% with half the staff)
+      Development environment for automatically creating the UI for Blazor applications. A powerful AI analyzer automatically creates the entire front end of the application.
+    </Description>
+    <Title>Automatic GUI generator for Blazor</Title>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="Components\Pages\Nav.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UISupportGeneric\UISupportGeneric.csproj" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <None Update="LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <Target Name="SetPackageVersion" DependsOnTargets="Build">
+    <PropertyGroup>
+      <!-- <PackageVersion>$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd.HHmmss&quot;))</PackageVersion> -->
+      <!-- You can customize the format and the rule about how version increases here. -->
+      <PackageVersion>$([System.DateTime]::Now.ToString("1.yy.MM.dd"))</PackageVersion>
+    </PropertyGroup>
+  </Target>
+
+</Project>

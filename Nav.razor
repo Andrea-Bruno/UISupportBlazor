@@ -1,0 +1,28 @@
+﻿@using UISupportGeneric.UI
+@inject NavigationManager MyNavigationManager
+
+@{
+    if (Id == null)
+    {
+        return;
+    }
+    try
+    {
+        Menu.IdTable.TryGetValue(new Guid(Id), out ClassInfo);
+    }
+    catch (Exception)
+    {
+    }
+}
+
+@if (ClassInfo != null)
+{
+    <ObjectEditor Info="@ClassInfo" InterfaceType="@InterfaceType.AutoSave"></ObjectEditor>
+}
+
+@code {
+    private ClassInfo? ClassInfo;
+    [Parameter]
+    public string? Id { get; set; }
+}
+

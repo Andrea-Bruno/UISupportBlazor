@@ -1,0 +1,53 @@
+﻿@using static UISupportGeneric.Util
+@using UISupportGeneric.UI
+@using Microsoft.AspNetCore.Components.Routing
+
+<nav class="nav flex-column">
+    @if (ClassesInfo != null)
+    {
+        foreach (var classInfo in ClassesInfo)
+        {
+            var expandSubNav = ClassesInfo.Where(x => x.MemberOfId == classInfo.Id).ToArray();
+            var pageId = "nav/" + classInfo.Id;
+
+            lock (IdTable)
+            {
+                @if (!IdTable.ContainsKey(classInfo.Id))
+                {
+                    IdTable.Add(classInfo.Id, classInfo);
+                }
+            }
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="@pageId">
+                    <span style="padding: 0rem 1rem 0rem 0rem" aria-hidden="true">
+                        @((MarkupString)UISupportGeneric.Util.GetIcon(classInfo.Icon, "width: 1.25em; height: 1.25em; vertical-align: -0.125em; fill: currentColor; display: inline-block;"))
+                    </span> @classInfo.Label
+                </NavLink>
+            </div>
+        }
+    }
+</nav>
+
+@code {
+    /// <summary>
+    /// Sets of classes with the main functions to be rendered in the UI
+    /// </summary>
+    [Parameter]
+    public IEnumerable<ClassInfo>? ClassesInfo { get; set; }
+
+    /// <summary>
+    /// If Classes Info is not set we can indicate the Namespace where all the classes reside, as long as we are working on the current assembly
+    /// </summary>
+    [Parameter]
+    public string? RootUINamespace
+    {
+        set
+        {
+            ClassesInfo = UISupportGeneric.Util.GetAllClassInfoInNamespace(value, null);
+        }
+    }
+
+
+    // internal string? pageId;
+    internal static readonly Dictionary<Guid, ClassInfo> IdTable = new();
+}
