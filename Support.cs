@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
+using System.Reflection;
 using UISupportGeneric.UI;
 
 namespace UISupportBlazor
@@ -26,7 +28,7 @@ namespace UISupportBlazor
                     {
                         panels = Activator.CreateInstance(panelsType);
                         session.Values.Add(nameof(panels), panels);
-                        classInfoList = new List<ClassInfo>();
+                        classInfoList = [];
                         session.Values.Add(nameof(classInfoList), classInfoList);
                         var classInfo = UISupportGeneric.Util.GetClassInfo(panels);
                         foreach (var element in classInfo.Elements)
@@ -34,6 +36,79 @@ namespace UISupportBlazor
                             if (element is ClassInfo info)
                                 classInfoList.Add(info);
                         }
+                    }
+                    else if (session.Values.TryGetValue(nameof(classInfoList), out object? classInfoListObj))
+                    {
+                        return (List<ClassInfo>)classInfoListObj;
+                    }
+                }
+            }
+            return classInfoList;
+        }
+
+        /// <summary>
+        /// Get all ClassInfos instantiated as members of the type passed as a parameter.
+        /// This function also creates a browsing session for the current user(if it hasn't already been created), and creates an object of the type passed as a parameter and assigns it to the user session.
+        /// </summary>
+        /// <param name="httpContext">Current httpContext</param>
+        /// <param name="atNamespace">The namespace where all the classes representing the panels are defined. The default value indicates the namespace associated with the Panels directory</param>
+        /// <returns>The list of ClassInfos that represent the panels that the application must have. This list corresponds to the properties of the type passed as a parameter.</returns>
+        public static List<ClassInfo>? GetAllClassInfo(HttpContext httpContext, string? atNamespace = default)
+        {
+            List<ClassInfo>? classInfoList = null;
+            if (httpContext != null)
+            {
+
+                var stackTrace = new StackTrace();
+                var method = stackTrace.GetFrame(1)?.GetMethod();
+                var declaringType = method?.DeclaringType;
+                Assembly callingAssembly = declaringType.Assembly;
+                if (atNamespace == null)
+                {
+                    var fullNamespace = declaringType?.Namespace;
+                    if (fullNamespace == null)
+                        return null;
+                    var rootNamespace = fullNamespace.Split('.')[0];
+                    atNamespace = rootNamespace + ".Panels";
+                }
+                lock (httpContext)
+                {
+                    var classes = callingAssembly
+                                           .GetTypes()
+                                           .Where(t => t.Namespace == atNamespace &&
+                                                       t.IsClass &&
+                                                       t.IsPublic);
+
+
+                    var session = Session.Sessions.GetSession(httpContext);
+                    object panels;
+                    if (!session.Values.TryGetValue(nameof(panels), out panels))
+                    {
+
+                        var panelsDictipnary = new Dictionary<string, object>();
+                        classInfoList = [];
+
+                        foreach (var type in classes)
+                        {
+                            if (UISupportGeneric.Util.IsStaticClass(type))
+                            {
+                                var classInfo = UISupportGeneric.Util.GetClassInfo(type);
+                                classInfoList.Add(classInfo);
+                            }
+                            else
+                            {
+                                var panel = Activator.CreateInstance(type);
+                                if (panel != null)
+                                {
+                                    panelsDictipnary.Add(type.Name, panel);
+                                    var classInfo = UISupportGeneric.Util.GetClassInfo(panel);
+                                    classInfoList.Add(classInfo);
+                                }
+                            }
+                        }
+                        panels = panelsDictipnary;
+                        session.Values.Add(nameof(panels), panelsDictipnary);
+                        session.Values.Add(nameof(classInfoList), classInfoList);
                     }
                     else if (session.Values.TryGetValue(nameof(classInfoList), out object? classInfoListObj))
                     {
