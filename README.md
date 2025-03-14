@@ -33,7 +33,7 @@ Join the countless organizations already revolutionizing their workflows and ach
 
 ## Samples
 We invite you to view and test this collection of examples, they are excellent demonstration tutorials on how to create and use this powerful tool:
-[Blazor Auto GUI Generato Samples App](https://github.com/Andrea-Bruno/Blazor_Auto_GUI_generator_samples_app)
+[Blazor Auto GUI Generato Samples App](https://github.com/Andrea-Bruno/Blazor-Auto-GUI-generator-samples)
 
 
 
