@@ -42,20 +42,73 @@ We invite you to view and test this collection of examples, they are excellent d
 
 ## Usage:
 
-1) Enter the project reference or equivalent Nuget package to your Blazor project
+The easiest way to start is to take as a template one of the projects used in the tutorials published in the repository: [Blazor Auto GUI Generator Samples](https://github.com/Andrea-Bruno/Blazor-Auto-GUI-generator-samples)
 
-2) Add the content rendering component to the navigation menu.
+Alternatively, you can also set up your own Blazor server project by following the steps below:
+
+1) Create a **blazor server** project, with **global** interactive position (be careful to set these parameters when you create your project with Visual Studio)
+
+2) Enter the project reference or equivalent NuGet package (UISupportBlazor) to your Blazor project
+
+3) Enable the project to be interpreted by the assembly analyzer to automatically generate the document file by adding the following tag: <GenerateDocumentationFile>True</GenerateDocumentationFile>:
+
+```xml
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+```
+
+4) Enable HttpContext in your project (this will allow you to manage multiple sessions and therefore manage multiple users simultaneously).
+
+Add this to your program.cs file:
+
+```csharp
+
+// Used to get httpContext in razor pages
+builder.Services.AddHttpContextAccessor();
+```
+
+
+3) Add the content rendering component to the navigation menu.
 
 In the file:
 
 Components > Layout > NavMenu.razor
 
 ```xml
+@inject IHttpContextAccessor HttpContextAccessor
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">FieldSetting</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="nav flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+    </nav>
+    @{
+        var panels = UISupportBlazor.Support.GetAllClassInfo(HttpContextAccessor.HttpContext);
+    }
     @* Component to add for dynamic rendering of AI-generated content *@
-    <UISupportBlazor.Menu ClassesInfo="@BackEndApp.Features"></UISupportBlazor.Menu>
+    <UISupportBlazor.Menu ClassesInfo="@panels"></UISupportBlazor.Menu>
+</div>
+
+
 ```
 
-Add the generic page in the Pages folder that shows dynamically generated UI content, this page should have the name "Nav.razor" and the content must be as follows: 
+6) Add the generic page in the Pages folder that shows dynamically generated UI content, this page should have the name "Nav.razor" and the content must be as follows: 
 
 ```
 @page "/nav/{Id}"
@@ -66,4 +119,109 @@ Add the generic page in the Pages folder that shows dynamically generated UI con
 }
 ```
 
+7) Adapt the contents of the **\Components\Layout\NavMenu.razor.css** file, as shown here:
+
+```css
+.navbar-toggler {
+    appearance: none;
+    cursor: pointer;
+    width: 3.5rem;
+    height: 2.5rem;
+    color: white;
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") no-repeat center/1.75rem rgba(255, 255, 255, 0.1);
+}
+
+    .navbar-toggler:checked {
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+
+.top-row {
+    min-height: 3.5rem;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.navbar-brand {
+    font-size: 1.1rem;
+}
+
+.bi {
+    display: inline-block;
+    position: relative;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.75rem;
+    top: -1px;
+    background-size: cover;
+}
+
+.bi-house-door-fill-nav-menu {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-house-door-fill' viewBox='0 0 16 16'%3E%3Cpath d='M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z'/%3E%3C/svg%3E");
+}
+
+.bi-plus-square-fill-nav-menu {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-plus-square-fill' viewBox='0 0 16 16'%3E%3Cpath d='M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z'/%3E%3C/svg%3E");
+}
+
+.bi-list-nested-nav-menu {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-list-nested' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M4.5 11.5A.5.5 0 0 1 5 11h10a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 1 3h10a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5z'/%3E%3C/svg%3E");
+}
+
+::deep .nav-item {
+    font-size: 0.9rem;
+    padding-bottom: 0.5rem;
+}
+
+    ::deep .nav-item .nav-link {
+        color: #d7d7d7;
+        background: none;
+        border: none;
+        border-radius: 4px;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        line-height: 3rem;
+        width: 100%;
+    }
+
+    ::deep .nav-item ::deep a.active {
+        background-color: rgba(255,255,255,0.37);
+        color: white;
+    }
+
+    ::deep .nav-item .nav-link:hover {
+        background-color: rgba(255,255,255,0.1);
+        color: white;
+    }
+
+.nav-scrollable {
+    display: none;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.navbar-toggler:checked ~ .nav-scrollable {
+    display: block;
+}
+
+@media (min-width: 641px) {
+    .navbar-toggler {
+        display: none;
+    }
+
+    .nav-scrollable {
+        /* Never collapse the sidebar for wide screens */
+        display: block;
+        /* Allow sidebar to scroll for tall menus */
+        height: calc(100vh - 3.5rem);
+        overflow-y: auto;
+    }
+}
+```
+This last adjustment was made necessary because of a bug in Blazor where the ::deep directive doesn't work unless it's put first (if anyone who works on Blazor development is reading this, we suggest fixing this bug.)
+
+8) Create, in your project, the **Panel** directory in which to put the classes that represent the back-end of your project, these will act as the basis for the automatic creation of the front-end.
 

@@ -34,11 +34,11 @@
 
         var attributes = new Dictionary<string, object>();
         if (EditableMember.Min != null)
-            attributes.Add("min", EditableMember.Min);
+            attributes.Add("min", ((double)(EditableMember.Min)).ToString(System.Globalization.CultureInfo.InvariantCulture));
         if (EditableMember.Max != null)
-            attributes.Add("max", EditableMember.Max);
+            attributes.Add("max", ((double)(EditableMember.Max)).ToString(System.Globalization.CultureInfo.InvariantCulture));
         if (EditableMember.Step != null)
-            attributes.Add("step", EditableMember.Step);
+            attributes.Add("step", ((double)(EditableMember.Step)).ToString(System.Globalization.CultureInfo.InvariantCulture));
 
         <input id="@EditableMember.Id" class="@classValue" disabled="@EditableMember.IsReadOnly" @bind-value=EditableMember.LiteralValue @oninput=OnChange @onblur=OnBlur checked="@EditableMember.IsTrue" type="@EditableMember.InputTypeText" @attributes="@attributes" />
         if (EditableMember.InputType == InputType.range)
