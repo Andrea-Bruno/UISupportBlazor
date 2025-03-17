@@ -12,20 +12,20 @@ In the various tutorials published, for convenience the front-end project coinci
 Automatic GUI (front-end) generator for Blazor. A powerful analyzer automatically creates the front-end with all panels and user interaction fields, analyzes the code in the back-end and automates all the client-side development work
 
 ## How It Works
-Harnessing the power of **state-of-the-art AI algorithms**, our platform analyzes backend assemblies and dynamically generates the complete front-end architecture on the fly. Not only that, but it also establishes all communication pipelines between the back end and front end, ensuring a cohesive and efficient development process.
+Harnessing the power of **state-of-the-art AI algorithms**, our platform analyzes back-end assemblies and dynamically generates the complete front-end architecture on the fly. Not only that, but it also establishes all communication pipelines between the back end and front end, ensuring a cohesive and efficient development process.
 
 With this revolutionary approach, software development speed is boosted by **an impressive 70%**, unlocking unparalleled efficiency and productivity.
 
 ## The Benefits You Can’t Ignore
-- **Unify Your Team**: Eliminate the traditional divide between backend and frontend teams. Streamlined automation halves the need for developers while fostering a more focused and collaborative environment.
-- **Save Time and Resources**: Reduce time-consuming communication between teams, freeing up resources to tackle complex backend functionalities.
+- **Unify Your Team**: Eliminate the traditional divide between back-end and front-end teams. Streamlined automation halves the need for developers while fostering a more focused and collaborative environment.
+- **Save Time and Resources**: Reduce time-consuming communication between teams, freeing up resources to tackle complex back-end functionalities.
 - **Accelerate Time-to-Market**: Deliver robust, fully functional applications faster than ever, giving your organization a competitive edge.
 - **Empower Your Developers**: Let your developers concentrate on what truly matters—innovation and problem-solving—while the repetitive tasks of front-end creation are handled automatically.
 
 ## Why Choose Our Technology?
-- **Innovative AI-Powered Design**: The platform is driven by unique algorithms designed to adapt and optimize your front-end based on backend assemblies in real-time.
+- **Innovative AI-Powered Design**: The platform is driven by unique algorithms designed to adapt and optimize your front-end based on back-end assemblies in real-time.
 - **Cost Efficiency**: Fewer developers, faster timelines, and automated processes mean **significant cost savings** for your organization.
-- **Enhanced Collaboration**: By bridging the gap between backend and frontend efforts, teams can work smarter, not harder.
+- **Enhanced Collaboration**: By bridging the gap between back-end and front-end efforts, teams can work smarter, not harder.
 
 ## Empowering Your Team, Accelerating Success
 Imagine a world where your team is no longer weighed down by front-end development bottlenecks. Our platform transforms the workflow, paving the way for quicker, smarter, and more reliable software delivery. It’s not just about automation; it’s about unleashing your team’s potential.
@@ -46,7 +46,7 @@ The easiest way to start is to take as a template one of the projects used in th
 
 Alternatively, you can also set up your own Blazor server project by following the steps below:
 
-1) Create a **blazor server** project, with **global** interactive position (be careful to set these parameters when you create your project with Visual Studio)
+1) Create a **Blazor server** project, with **global** interactive position (be careful to set these parameters when you create your project with Visual Studio)
 
 2) Enter the project reference or equivalent NuGet package (UISupportBlazor) to your Blazor project
 
