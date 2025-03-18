@@ -16,7 +16,7 @@ Harnessing the power of **state-of-the-art AI algorithms**, our platform analyze
 
 With this revolutionary approach, software development speed is boosted by **an impressive 70%**, unlocking unparalleled efficiency and productivity.
 
-## The Benefits You Can’t Ignore
+## The Benefits You Can't Ignore
 - **Unify Your Team**: Eliminate the traditional divide between back-end and front-end teams. Streamlined automation halves the need for developers while fostering a more focused and collaborative environment.
 - **Save Time and Resources**: Reduce time-consuming communication between teams, freeing up resources to tackle complex back-end functionalities.
 - **Accelerate Time-to-Market**: Deliver robust, fully functional applications faster than ever, giving your organization a competitive edge.
@@ -28,17 +28,15 @@ With this revolutionary approach, software development speed is boosted by **an 
 - **Enhanced Collaboration**: By bridging the gap between back-end and front-end efforts, teams can work smarter, not harder.
 
 ## Empowering Your Team, Accelerating Success
-Imagine a world where your team is no longer weighed down by front-end development bottlenecks. Our platform transforms the workflow, paving the way for quicker, smarter, and more reliable software delivery. It’s not just about automation; it’s about unleashing your team’s potential.
+Imagine a world where your team is no longer weighed down by front-end development bottlenecks. Our platform transforms the workflow, paving the way for quicker, smarter, and more reliable software delivery. It's not just about automation; it's about unleashing your team's potential.
 
-> **“Invest in innovation. Simplify development. Lead the industry.”**
+> **"Invest in innovation. Simplify development. Lead the industry."**
 
 Join the countless organizations already revolutionizing their workflows and achieving unmatched results. Take the leap into the future of software development today!
 
-## Samples
+## Samples & Manual
 We invite you to view and test this collection of examples, they are excellent demonstration tutorials on how to create and use this powerful tool:
-[Blazor Auto GUI Generato Samples App](https://github.com/Andrea-Bruno/Blazor-Auto-GUI-generator-samples)
-
-
+[Demonstration applications (examples) and manuals](https://github.com/Andrea-Bruno/Blazor-Auto-GUI-generator-samples)
 
 ## Usage:
 
