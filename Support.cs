@@ -5,6 +5,9 @@ using UISupportGeneric.UI;
 
 namespace UISupportBlazor
 {
+    /// <summary>
+    /// GUI support features
+    /// </summary>
     public static class Support
     {
         /// <summary>
@@ -26,6 +29,8 @@ namespace UISupportBlazor
                     object panels;
                     if (!session.Values.TryGetValue(nameof(panels), out panels))
                     {
+                        if (panelsType.GetConstructor(Type.EmptyTypes) != null)
+                            throw new Exception("Cannot process classes without parameterless constructor (invalid type value)");
                         panels = Activator.CreateInstance(panelsType);
                         session.Values.Add(nameof(panels), panels);
                         classInfoList = [];
@@ -95,7 +100,7 @@ namespace UISupportBlazor
                                 var classInfo = UISupportGeneric.Util.GetClassInfo(type);
                                 classInfoList.Add(classInfo);
                             }
-                            else
+                            else if (type.GetConstructor(Type.EmptyTypes) != null)
                             {
                                 var panel = Activator.CreateInstance(type);
                                 if (panel != null)

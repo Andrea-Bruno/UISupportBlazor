@@ -75,16 +75,33 @@ builder.Services.AddHttpContextAccessor();
 
 3) Add the content rendering component to the navigation menu.
 
+```xml
+@inject IHttpContextAccessor HttpContextAccessor
+    ...
+    ...
+    ...
+    ...
+    @{
+        var panels = UISupportBlazor.Support.GetAllClassInfo(HttpContextAccessor.HttpContext);
+    }
+    @* Component to add for dynamic rendering of AI-generated content *@
+    <UISupportBlazor.Menu ClassesInfo="@panels"></UISupportBlazor.Menu>
+    ...
+```
+
+
 In the file:
 
 Components > Layout > NavMenu.razor
+
+You should get something like this:
 
 ```xml
 @inject IHttpContextAccessor HttpContextAccessor
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">FieldSetting</a>
+        <a class="navbar-brand" href="">YourProjectName</a>
     </div>
 </div>
 
