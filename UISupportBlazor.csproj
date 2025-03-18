@@ -35,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!--This reference if missing can be replaced with the related NuGet package: UISupportGeneric-->
     <ProjectReference Include="..\UISupportGeneric\UISupportGeneric.csproj" />
   </ItemGroup>
 
