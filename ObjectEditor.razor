@@ -24,59 +24,62 @@
         {
             foreach (var element in Info.Elements)
             {
-                if (element is MethodUISupport method)
+                if (element.Hidden != true)
                 {
-                    var fieldsetClass = method.Parameters.Count > 0 ? "container panel panel-default border my-3" : "";
-                    <fieldset class=@fieldsetClass>
-                        @if (method.Parameters.Count != 0)
-                        {
-                            <p class="h5">@method.Description</p>
-                        }
-                        @foreach (var parameter in method.Parameters)
-                        {
-                            <ObjectMember EditableMember="@parameter" RefreshContainer="@Refresh"></ObjectMember>
-                        }
-                        <button class="btn btn-primary my-1" type="submit" @onclick=@method.Execute>@method.Label</button>
-                        @if (method.Parameters.Count == 0)
-                        {
-                            <Tooltip Text="@method.Description"></Tooltip>
-                        }
-                        @if (method.TableResult != null)
-                        {
-                            <ObjectArray Array="@method.TableResult" RefreshContainer="@Refresh"></ObjectArray>
-                        }
-                        else
-                        {
-                            <Message Hidden="@(!method.ShowResult)" Success="@method.Successful" Title="@Dictionary.Result" Text="@(method.Successful ? method.Result : method.Error)" Tooltip="@method.Tooltip"></Message>
-                        }
-                    </fieldset>
-                }
-                else if (element is PropertyUISupport property)
-                {
-                    <ObjectMember EditableMember="@property" RefreshContainer="@Refresh"></ObjectMember>
-                }
-                else if (element is TableUISupport array)
-                {
-                    <ObjectArray Array="@array" RefreshContainer="@Refresh"></ObjectArray>
-                }
-                else if (element is ObjectsCollection objectsCollection)
-                {
-                    foreach (var obj in objectsCollection.Elements)
+                    if (element is MethodUISupport method)
                     {
-                        if (obj is ClassInfo classInfo)
+                        var fieldsetClass = method.Parameters.Count > 0 ? "container panel panel-default border my-3" : "";
+                        <fieldset class=@fieldsetClass>
+                            @if (method.Parameters.Count != 0)
+                            {
+                                <p class="h5">@method.Description</p>
+                            }
+                            @foreach (var parameter in method.Parameters)
+                            {
+                                <ObjectMember EditableMember="@parameter" RefreshContainer="@Refresh"></ObjectMember>
+                            }
+                            <button class="btn btn-primary my-1" type="submit" @onclick=@method.Execute>@method.Label</button>
+                            @if (method.Parameters.Count == 0)
+                            {
+                                <Tooltip Text="@method.Description"></Tooltip>
+                            }
+                            @if (method.TableResult != null)
+                            {
+                                <ObjectArray Array="@method.TableResult" RefreshContainer="@Refresh"></ObjectArray>
+                            }
+                            else
+                            {
+                                <Message Hidden="@(!method.ShowResult)" Success="@method.Successful" Title="@Dictionary.Result" Text="@(method.Successful ? method.Result : method.Error)" Tooltip="@method.Tooltip"></Message>
+                            }
+                        </fieldset>
+                    }
+                    else if (element is PropertyUISupport property)
+                    {
+                        <ObjectMember EditableMember="@property" RefreshContainer="@Refresh"></ObjectMember>
+                    }
+                    else if (element is TableUISupport array)
+                    {
+                        <ObjectArray Array="@array" RefreshContainer="@Refresh"></ObjectArray>
+                    }
+                    else if (element is ObjectsCollection objectsCollection)
+                    {
+                        foreach (var obj in objectsCollection.Elements)
                         {
-                            <ObjectEditor ObjectToEdit="null" Info="@classInfo" InterfaceType="@InterfaceType" Level="@(Level + 1)"></ObjectEditor>
-                        }
-                        if (obj is ArrayElementPrimitiveUI arrayElementPrimitiveUI)
-                        {
-                            <ObjectMember EditableMember="@arrayElementPrimitiveUI" RefreshContainer="@Refresh"></ObjectMember>
+                            if (obj is ClassInfo classInfo)
+                            {
+                                <ObjectEditor ObjectToEdit="null" Info="@classInfo" InterfaceType="@InterfaceType" Level="@(Level + 1)"></ObjectEditor>
+                            }
+                            if (obj is ArrayElementPrimitiveUI arrayElementPrimitiveUI)
+                            {
+                                <ObjectMember EditableMember="@arrayElementPrimitiveUI" RefreshContainer="@Refresh"></ObjectMember>
+                            }
                         }
                     }
-                }
-                else if (element is ClassInfo obj)
-                {
-                    <ObjectEditor ObjectToEdit="null" Info="@obj" InterfaceType="@InterfaceType" Level="@(Level + 1)">
-                    </ObjectEditor>
+                    else if (element is ClassInfo obj)
+                    {
+                        <ObjectEditor ObjectToEdit="null" Info="@obj" InterfaceType="@InterfaceType" Level="@(Level + 1)">
+                        </ObjectEditor>
+                    }
                 }
             }
         }
@@ -110,9 +113,6 @@
     }
     <Warning Message="@DescriptionWarning" Title="@TitleWarning" Hidden="@HiddenWarning"></Warning>
 
-}
-@{
-        //Info.OnChange = Refresh;
 }
 @code {
     private void Refresh()

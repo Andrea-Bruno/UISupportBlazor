@@ -39,7 +39,6 @@
             attributes.Add("max", ((double)(EditableMember.Max)).ToString(System.Globalization.CultureInfo.InvariantCulture));
         if (EditableMember.Step != null)
             attributes.Add("step", ((double)(EditableMember.Step)).ToString(System.Globalization.CultureInfo.InvariantCulture));
-
         <input id="@EditableMember.Id" class="@classValue" disabled="@EditableMember.IsReadOnly" @bind-value=EditableMember.LiteralValue @oninput=OnChange @onblur=OnBlur checked="@EditableMember.IsTrue" type="@EditableMember.InputTypeText" @attributes="@attributes" />
         if (EditableMember.InputType == InputType.range)
         {
@@ -76,7 +75,6 @@
             EditableMember.LiteralValue = args?.Value?.ToString();
             Changed = true;
         }
-
     }
     private bool Changed;
     private void OnBlur(){
