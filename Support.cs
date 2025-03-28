@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.Loader;
 using UISupportGeneric.UI;
 
 namespace UISupportBlazor
@@ -29,9 +30,14 @@ namespace UISupportBlazor
                     object panels;
                     if (!session.Values.TryGetValue(nameof(panels), out panels))
                     {
-                        if (panelsType.GetConstructor(Type.EmptyTypes) != null)
+                        try
+                        {
+                            panels = Activator.CreateInstance(panelsType);
+                        }
+                        catch (Exception)
+                        {
                             throw new Exception("Cannot process classes without parameterless constructor (invalid type value)");
-                        panels = Activator.CreateInstance(panelsType);
+                        }
                         session.Values.Add(nameof(panels), panels);
                         classInfoList = [];
                         session.Values.Add(nameof(classInfoList), classInfoList);
@@ -63,14 +69,19 @@ namespace UISupportBlazor
             List<ClassInfo>? classInfoList = null;
             if (httpContext != null)
             {
-
-                var stackTrace = new StackTrace();
-                var method = stackTrace.GetFrame(1)?.GetMethod();
-                var declaringType = method?.DeclaringType;
-                Assembly callingAssembly = declaringType.Assembly;
+                Assembly? assembly = null;
+                if (atNamespace != null)
+                    assembly = UISupportGeneric.Util.NamespaceToAssembly(atNamespace);
+                if (assembly == null)
+                {
+                    var stackTrace = new StackTrace();
+                    var method = stackTrace.GetFrame(1)?.GetMethod();
+                    var declaringType = method?.DeclaringType;
+                    assembly = declaringType.Assembly;
+                }
                 if (atNamespace == null)
                 {
-                    var fullNamespace = declaringType?.Namespace;
+                    var fullNamespace = UISupportGeneric.Util.GetNamespace(assembly);
                     if (fullNamespace == null)
                         return null;
                     var rootNamespace = fullNamespace.Split('.')[0];
@@ -78,11 +89,7 @@ namespace UISupportBlazor
                 }
                 lock (httpContext)
                 {
-                    var classes = callingAssembly
-                                           .GetTypes()
-                                           .Where(t => t.Namespace == atNamespace &&
-                                                       t.IsClass &&
-                                                       t.IsPublic);
+                    var classes = assembly.GetTypes().Where(t => t.Namespace == atNamespace && t.IsClass && t.IsPublic);
 
 
                     var session = Session.Sessions.GetSession(httpContext);
