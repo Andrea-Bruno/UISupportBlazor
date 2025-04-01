@@ -38,7 +38,7 @@
                             {
                                 <ObjectMember EditableMember="@parameter" RefreshContainer="@Refresh"></ObjectMember>
                             }
-                            <button class="btn btn-primary my-1" type="submit" @onclick=@method.Execute>@method.Label</button>
+                            <button class="btn btn-primary my-1" type="submit" @onclick="() => { method.Execute(); RefreshContainer?.Invoke(); }">@method.Label</button>
                             @if (method.Parameters.Count == 0)
                             {
                                 <Tooltip Text="@method.Description"></Tooltip>
@@ -67,7 +67,7 @@
                         {
                             if (obj is ClassInfo classInfo)
                             {
-                                <ObjectEditor ObjectToEdit="null" Info="@classInfo" InterfaceType="@InterfaceType" Level="@(Level + 1)"></ObjectEditor>
+                                <ObjectEditor ObjectToEdit="null" Info="@classInfo" InterfaceType="@InterfaceType" RefreshContainer="@Refresh" Level="@(Level + 1)"></ObjectEditor>
                             }
                             if (obj is ArrayElementPrimitiveUI arrayElementPrimitiveUI)
                             {
@@ -77,8 +77,7 @@
                     }
                     else if (element is ClassInfo obj)
                     {
-                        <ObjectEditor ObjectToEdit="null" Info="@obj" InterfaceType="@InterfaceType" Level="@(Level + 1)">
-                        </ObjectEditor>
+                        <ObjectEditor ObjectToEdit="null" Info="@obj" InterfaceType="@InterfaceType" RefreshContainer="@Refresh" Level="@(Level + 1)"></ObjectEditor>
                     }
                 }
             }
@@ -119,8 +118,9 @@
     {
         InvokeAsync(StateHasChanged);
     }
-
-
+    // Used to update the container component
+    [Parameter, EditorRequired]
+    public Action? RefreshContainer { get; set; }
     [Parameter]
     public ClassInfo? Info { get; set; }
     // The object to edit or static class

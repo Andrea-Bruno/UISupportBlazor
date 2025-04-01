@@ -17,10 +17,14 @@
 
 @if (ClassInfo != null)
 {
-    <ObjectEditor Info="@ClassInfo" InterfaceType="@InterfaceType.AutoSave"></ObjectEditor>
+    <ObjectEditor Info="@ClassInfo" InterfaceType="@InterfaceType.AutoSave" RefreshContainer="@Refresh"></ObjectEditor>
 }
 
 @code {
+    private void Refresh()
+    {
+        InvokeAsync(StateHasChanged);
+    }
     private ClassInfo? ClassInfo;
     [Parameter]
     public string? Id { get; set; }
