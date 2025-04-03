@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
 using System.Reflection;
-using System.Runtime.Loader;
 using UISupportGeneric.UI;
 
 namespace UISupportBlazor
@@ -104,6 +103,7 @@ namespace UISupportBlazor
                         {
                             if (UISupportGeneric.Util.IsStaticClass(type))
                             {
+                                panelsDictipnary.Add(type.Name, type);
                                 var classInfo = UISupportGeneric.Util.GetClassInfo(type);
                                 classInfoList.Add(classInfo);
                             }
