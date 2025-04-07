@@ -11,7 +11,7 @@ In the various tutorials published, for convenience the front-end project coinci
 
 Automatic GUI (front-end) generator for Blazor. A powerful analyzer automatically creates the front-end with all panels and user interaction fields, analyzes the code in the back-end and automates all the client-side development work
 
-![Back-end and front-end developing](./front-end and back-end memes.jpg)
+![Back-end and front-end developing](./front-end_and_back-end_memes.jpg)
 
 _Save time and pain by automating front-end development._
 
