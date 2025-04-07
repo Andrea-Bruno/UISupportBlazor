@@ -48,7 +48,6 @@ The implementation of this algorithm will lead to thousands of front-end develop
 
 ![Front-end Developer Replaced by New Technology Seeks Job](./front-end_developer.jpg)
 
-
 ## Usage:
 
 The easiest way to start is to take as a template one of the projects used in the tutorials published in the repository: [Blazor Auto GUI Generator Samples](https://github.com/Andrea-Bruno/Blazor-Auto-GUI-generator-samples)
