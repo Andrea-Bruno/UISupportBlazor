@@ -19,6 +19,8 @@
       Development environment for automatically creating the UI for Blazor applications. A powerful AI analyzer automatically creates the entire front end of the application.
     </Description>
     <Title>Automatic GUI generator for Blazor</Title>
+    <PackageProjectUrl>https://github.com/Andrea-Bruno/UISupportBlazor</PackageProjectUrl>
+    <PackageIcon>ai.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -41,6 +43,10 @@
 
   
   <ItemGroup>
+    <None Update="ai.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Update="LICENSE.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
