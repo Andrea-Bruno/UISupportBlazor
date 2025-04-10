@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Reflection;
+using UISupportGeneric.UI;
 
 namespace UISupportBlazor
 {
@@ -92,19 +93,22 @@ namespace UISupportBlazor
             /// <param name="context">Current HttpContext</param>
             /// <param name="key">Cookie name</param>
             /// <param name="value">Cookie value</param>
-            static public void SetCookie(HttpContext context, string key, string value)
+            static public bool SetCookie(HttpContext context, string key, string value)
             {
-                var options = new CookieOptions
+                if (!context.Response.HasStarted)
                 {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict,
-                    MaxAge = TimeOut,
-                    // Expires = DateTime.UtcNow.Add(TimeOut)
-                };
-
-                context.Response.Cookies.Delete(key);
-                context.Response.Cookies.Append(key, value, options);
+                    var options = new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.Strict,
+                        MaxAge = TimeOut,
+                    };
+                    context.Response.Cookies.Delete(key);
+                    context.Response.Cookies.Append(key, value, options);
+                    return true;
+                }
+                return false;
             }
 
             /// <summary>
@@ -158,7 +162,7 @@ namespace UISupportBlazor
         /// </summary>
         /// <param name="httpContext">Current HttpContext</param>
         /// <returns>Session object</returns>
-        static public Session Current(Microsoft.AspNetCore.Http.HttpContext httpContext)
+        static public Session Current(HttpContext httpContext)
         {
             var session = Sessions.GetSession(httpContext);
             return session;
@@ -196,6 +200,28 @@ namespace UISupportBlazor
                 if (elementName == null)
                     return panel;
                 GetElementValue(panel, elementName);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets ClassInfo by its ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>ClassInfo object</returns>
+        public ClassInfo? GetClassInfoById(Guid id)
+        {
+            object? classInfoList;
+            if (Values.TryGetValue(nameof(classInfoList), out classInfoList))
+            {
+                if (classInfoList is List<ClassInfo> panelsList)
+                {
+                    foreach (var panel in panelsList)
+                    {
+                        if (panel.Id == id)
+                            return panel;
+                    }
+                }
             }
             return null;
         }

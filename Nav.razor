@@ -1,4 +1,6 @@
-﻿@using UISupportGeneric.UI
+﻿@inject IHttpContextAccessor? HttpContextAccessor
+@using UISupportGeneric.UI
+@using Microsoft.AspNetCore.Http
 @inject NavigationManager MyNavigationManager
 
 @{
@@ -8,10 +10,25 @@
     }
     try
     {
-        Menu.IdTable.TryGetValue(new Guid(Id), out ClassInfo);
+        var id = new Guid(Id);
+
+        // Check if HttpContextAccessor is available and HttpContext is not null
+        if (HttpContextAccessor?.HttpContext != null)
+        {
+            // Get the session object
+            var session = UISupportBlazor.Session.Sessions.GetSession(HttpContextAccessor.HttpContext);
+
+            // Get the login panel from the session
+            ClassInfo = session.GetClassInfoById(id);
+        }
+        else if (ClassInfo == null)
+        {
+            Menu.IdTable.TryGetValue(id, out ClassInfo);
+        }
     }
     catch (Exception)
     {
+        // Handle exceptions (optional: add logging here)
     }
 }
 
@@ -29,4 +46,3 @@
     [Parameter]
     public string? Id { get; set; }
 }
-

@@ -27,7 +27,14 @@ namespace UISupportBlazor
 
                     var session = Session.Sessions.GetSession(httpContext);
                     object panels;
-                    if (!session.Values.TryGetValue(nameof(panels), out panels))
+                    if (session.Values.TryGetValue(nameof(panels), out panels))
+                    {
+                        if (session.Values.TryGetValue(nameof(classInfoList), out object? classInfoListObj))
+                        {
+                            return (List<ClassInfo>)classInfoListObj;
+                        }
+                    }
+                    else
                     {
                         try
                         {
@@ -46,10 +53,6 @@ namespace UISupportBlazor
                             if (element is ClassInfo info)
                                 classInfoList.Add(info);
                         }
-                    }
-                    else if (session.Values.TryGetValue(nameof(classInfoList), out object? classInfoListObj))
-                    {
-                        return (List<ClassInfo>)classInfoListObj;
                     }
                 }
             }
@@ -96,14 +99,14 @@ namespace UISupportBlazor
                     if (!session.Values.TryGetValue(nameof(panels), out panels))
                     {
 
-                        var panelsDictipnary = new Dictionary<string, object>();
+                        var panelsDictionary = new Dictionary<string, object>();
                         classInfoList = [];
 
                         foreach (var type in classes)
                         {
                             if (UISupportGeneric.Util.IsStaticClass(type))
                             {
-                                panelsDictipnary.Add(type.Name, type);
+                                panelsDictionary.Add(type.Name, type);
                                 var classInfo = UISupportGeneric.Util.GetClassInfo(type);
                                 classInfoList.Add(classInfo);
                             }
@@ -112,14 +115,14 @@ namespace UISupportBlazor
                                 var panel = Activator.CreateInstance(type);
                                 if (panel != null)
                                 {
-                                    panelsDictipnary.Add(type.Name, panel);
+                                    panelsDictionary.Add(type.Name, panel);
                                     var classInfo = UISupportGeneric.Util.GetClassInfo(panel);
                                     classInfoList.Add(classInfo);
                                 }
                             }
                         }
-                        panels = panelsDictipnary;
-                        session.Values.Add(nameof(panels), panelsDictipnary);
+                        panels = panelsDictionary;
+                        session.Values.Add(nameof(panels), panelsDictionary);
                         session.Values.Add(nameof(classInfoList), classInfoList);
                     }
                     else if (session.Values.TryGetValue(nameof(classInfoList), out object? classInfoListObj))
