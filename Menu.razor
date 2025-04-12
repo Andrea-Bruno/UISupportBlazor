@@ -1,6 +1,7 @@
 ﻿@using static UISupportGeneric.Util
 @using UISupportGeneric.UI
 @using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Http
 
 <nav class="nav flex-column">
     @if (ClassInfoEnumerable != null)
@@ -29,6 +30,9 @@
                 </div>
             }
         }
+
+        // Save ClassInfoEnumerable in the session
+        SaveClassInfoEnumerableToSession();
     }
 </nav>
 
@@ -51,23 +55,32 @@
         }
     }
 
-    // internal string? pageId;
     internal static readonly Dictionary<Guid, ClassInfo> IdTable = new();
 
     public void Dispose()
     {
-        // https://www.syncfusion.com/faq/blazor/webassembly/how-do-i-dispose-a-page-in-blazor-webassembly
         foreach (var classInfo in ClassInfoEnumerable)
             classInfo.UnsubscribeOnChange(Refresh);
     }
 
-    @functions {
-        public void Refresh()
+    public void Refresh()
+    {
+        foreach (var classInfo in ClassInfoEnumerable)
+            classInfo.UnsubscribeOnChange(Refresh);
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void SaveClassInfoEnumerableToSession()
+    {
+        // Get the current HttpContext
+        var httpContext = HttpContextAccessor?.HttpContext;
+        if (httpContext != null && ClassInfoEnumerable != null)
         {
-            // this UI element is going to be destroyed, so remove the refresh event. (Refreshed web apps create a new UI instance)
-            foreach (var classInfo in ClassInfoEnumerable)
-                classInfo.UnsubscribeOnChange(Refresh);
-            InvokeAsync(StateHasChanged);
+            var session = UISupportBlazor.Session.Sessions.GetSession(httpContext);
+            session.Values["AllowedPanels"] = ClassInfoEnumerable.ToList();                        
         }
     }
+
+    [Inject]
+    private IHttpContextAccessor? HttpContextAccessor { get; set; }
 }

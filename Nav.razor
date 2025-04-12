@@ -11,15 +11,32 @@
     try
     {
         var id = new Guid(Id);
-
         // Check if HttpContextAccessor is available and HttpContext is not null
         if (HttpContextAccessor?.HttpContext != null)
         {
             // Get the session object
             var session = UISupportBlazor.Session.Sessions.GetSession(HttpContextAccessor.HttpContext);
 
-            // Get the login panel from the session
+            // Get the ClassInfo by ID
             ClassInfo = session.GetClassInfoById(id);
+            if (ClassInfo == null)
+            {
+                // If ClassInfo is not found in the session, return
+                return;
+            }
+            // Check if ClassInfo is in the "AllowedPanels" list saved in the session
+            if (session.Values.TryGetValue("AllowedPanels", out var allowedPanelsObj) && allowedPanelsObj is List<ClassInfo> allowedPanels)
+            {
+                if (!allowedPanels.Contains(ClassInfo))
+                {
+                    return;
+                }
+            }
+            else
+            {
+                // If "AllowedPanels" is not found or is not of the correct type, return
+                return;
+            }
         }
         else if (ClassInfo == null)
         {
