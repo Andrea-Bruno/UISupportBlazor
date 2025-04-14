@@ -11,7 +11,7 @@ In the various tutorials published, for convenience the front-end project coinci
 
 Automatic GUI (front-end) generator for Blazor. A powerful analyzer automatically creates the front-end with all panels and user interaction fields, analyzes the code in the back-end and automates all the client-side development work
 
-![Back-end and front-end developing](https://github.com/Andrea-Bruno/UISupportBlazor/raw/master/front-end_and_back-end_memes.jpg)
+![Back-end and front-end developing](https://raw.githubusercontent.com/Andrea-Bruno/UISupportBlazor/master/front-end_and_back-end_memes.jpg)
 
 _Save time and pain by automating front-end development._
 
@@ -46,7 +46,7 @@ We invite you to view and test this collection of examples, they are excellent d
 ## Social Impact
 The implementation of this algorithm will lead to thousands of front-end developers being replaced, with profound and potentially devastating effects on their mental well-being. This breakthrough technology renders front-end developers as obsolete as coachmen were with the advent of the automobile.
 
-![Front-end Developer Replaced by New Technology Seeks Job](https://github.com/Andrea-Bruno/UISupportBlazor/raw/master/front-end_developer.jpg)
+![Front-end Developer Replaced by New Technology Seeks Job](https://raw.githubusercontent.com/Andrea-Bruno/UISupportBlazor/master/front-end_developer.jpg)
 
 ## Usage:
 
