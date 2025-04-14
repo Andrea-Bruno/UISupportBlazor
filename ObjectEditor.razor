@@ -1,4 +1,5 @@
-﻿@*
+﻿@inject NavigationManager NavigationManager
+@*
     // Help to use style class for bootstrap: https://www.w3schools.com/bootstrap/bootstrap_ref_all_classes.asp
 *@
 @using static UISupportGeneric.Util
@@ -10,6 +11,10 @@
     var container = Level == 0 ? "" : "card my-3";
     var title = Level == 0 ? "h1" : "card-header";
     var body = Level == 0 ? "" : "card-body";
+    if (Info?.RedirectTo != null)
+    {
+        NavigationManager.NavigateTo(Info.RedirectTo.ToString());
+    }
 }
 <div class="@container">
     <div class="@title">
