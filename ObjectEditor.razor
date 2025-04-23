@@ -7,6 +7,19 @@
 @using UISupportGeneric.Resources
 @{
     Info ??= ObjectToEdit == null ? null : GetClassInfo(ObjectToEdit, InterfaceType, SaveAction);
+    var uri = new Uri(NavigationManager.Uri);
+    var queryStrings = System.Web.HttpUtility.ParseQueryString(uri.Query);
+    foreach (string? key in queryStrings.AllKeys)
+    {
+        if (key != null)
+        {
+            var value = queryStrings[key];
+            if (value != null)
+            {
+                Info?.SetQueryString(key, value);
+            }
+        }
+    }
 
     var container = Level == 0 ? "" : "card my-3";
     var title = Level == 0 ? "h1" : "card-header";

@@ -9,6 +9,30 @@ namespace UISupportBlazor
     /// </summary>
     public class Session
     {
+    
+        private static IHttpContextAccessor? _httpContextAccessor;
+        /// <summary>
+        /// Configures the session with the provided IHttpContextAccessor
+        /// </summary>
+        /// <param name="httpContextAccessor"></param>
+        public static void Configure(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
+        /// <summary>
+        /// Checks if the session is configured
+        /// </summary>
+        public static bool IsConfigured => _httpContextAccessor != null;
+
+        /// <summary>
+        /// Gets the current HttpContext
+        /// </summary>
+        /// <returns>Current HttpContext</returns>
+        public static HttpContext? GetCurrentHttpContext()
+        {
+            return _httpContextAccessor?.HttpContext;
+        }
+
         /// <summary>
         /// Static class managing all active sessions and providing session-related operations
         /// </summary>
@@ -161,9 +185,17 @@ namespace UISupportBlazor
         /// Gets the current session for the provided HttpContext
         /// </summary>
         /// <param name="httpContext">Current HttpContext</param>
-        /// <returns>Session object</returns>
-        static public Session Current(HttpContext httpContext)
+        /// <returns>Session object or null if the session cannot be obtained</returns>
+        static public Session? Current(HttpContext? httpContext = null)
         {
+            if (httpContext == null)
+            {
+                httpContext = GetCurrentHttpContext();
+                if (httpContext == null)
+                {
+                    return null;
+                }
+            }
             var session = Sessions.GetSession(httpContext);
             return session;
         }
@@ -200,6 +232,28 @@ namespace UISupportBlazor
                 if (elementName == null)
                     return panel;
                 GetElementValue(panel, elementName);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets a panel of a specific type from the session
+        /// </summary>
+        /// <param name="type">Specific type</param>
+        /// <returns>Instance of the class specified with type, for the current session</returns>
+        public object? GetPanel(Type type)
+        {
+            object panels;
+            if (Values.TryGetValue(nameof(panels), out panels))
+            {
+                if (panels is Dictionary<string, object> panelsDictipnary)
+                {
+                    foreach (var panel in panelsDictipnary)
+                    {
+                        if (panel.Value.GetType() == type)
+                            return panel.Value;
+                    }
+                }
             }
             return null;
         }

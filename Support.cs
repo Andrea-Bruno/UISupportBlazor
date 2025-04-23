@@ -66,8 +66,9 @@ namespace UISupportBlazor
         /// <param name="httpContext">Current httpContext</param>
         /// <param name="atNamespace">The namespace where all the classes representing the panels are defined. The default value indicates the namespace associated with the Panels directory</param>
         /// <returns>The list of ClassInfos that represent the panels that the application must have. This list corresponds to the properties of the type passed as a parameter.</returns>
-        public static List<ClassInfo>? GetAllClassInfo(HttpContext httpContext, string? atNamespace = default)
+        public static List<ClassInfo>? GetAllClassInfo(HttpContext? httpContext = null, string? atNamespace = default)
         {
+            httpContext ??= Session.GetCurrentHttpContext();
             List<ClassInfo>? classInfoList = null;
             if (httpContext != null)
             {
