@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Dynamic;
 using System.Reflection;
+using UISupportGeneric.Resources;
 using UISupportGeneric.UI;
 
 namespace UISupportBlazor
@@ -345,6 +347,60 @@ namespace UISupportBlazor
         /// Dictionary storing session values
         /// </summary>
         public Dictionary<string, object> Values = [];
+
+
+        /// <summary>
+        /// Used to get and set values associated with the current session.
+        /// </summary>
+        public dynamic Val
+        {
+            get
+            {    
+                return new DynamicWrapper(Values);
+            }
+            set
+            {
+                if (value is ExpandoObject expando)
+                {
+                    var expandoDict = (IDictionary<string, object>)expando;
+                    foreach (var kvp in expandoDict)
+                    {
+                        Values[kvp.Key] = kvp.Value;
+                    }
+                }
+                else
+                {
+                    throw new InvalidOperationException("Val setter accepts only ExpandoObject.");
+                }
+            }
+        }
+
+
+        private class DynamicWrapper : DynamicObject
+        {
+            private readonly IDictionary<string, object> _dictionary;
+
+            public DynamicWrapper(IDictionary<string, object> dictionary)
+            {
+                _dictionary = dictionary;
+            }
+
+            public override bool TryGetMember(GetMemberBinder binder, out object? result)
+            {
+                if (_dictionary.TryGetValue(binder.Name, out result))
+                {
+                    return true;
+                }
+                result = null;
+                return true;
+            }
+
+            public override bool TrySetMember(SetMemberBinder binder, object? value)
+            {
+                _dictionary[binder.Name] = value!;
+                return true;
+            }
+        }
     }
 
     /// <summary>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
+using System.Net.Http;
 using System.Reflection;
 using UISupportGeneric.UI;
 
@@ -63,6 +64,20 @@ namespace UISupportBlazor
         /// Get all ClassInfos instantiated as members of the type passed as a parameter.
         /// This function also creates a browsing session for the current user(if it hasn't already been created), and creates an object of the type passed as a parameter and assigns it to the user session.
         /// </summary>
+        /// <param name="httpContextAccessor">http Context Accessor object</param>
+        /// <param name="atNamespace">The namespace where all the classes representing the panels are defined. The default value indicates the namespace associated with the Panels directory</param>
+        /// <returns></returns>
+        public static List<ClassInfo>? GetAllClassInfo(IHttpContextAccessor httpContextAccessor, string? atNamespace = default)
+        {
+            if (!Session.IsConfigured)
+                Session.Configure(httpContextAccessor);
+            return GetAllClassInfo(httpContext: null, atNamespace);
+        }
+
+        /// <summary>
+        /// Get all ClassInfos instantiated as members of the type passed as a parameter.
+        /// This function also creates a browsing session for the current user(if it hasn't already been created), and creates an object of the type passed as a parameter and assigns it to the user session.
+        /// </summary>
         /// <param name="httpContext">Current httpContext</param>
         /// <param name="atNamespace">The namespace where all the classes representing the panels are defined. The default value indicates the namespace associated with the Panels directory</param>
         /// <returns>The list of ClassInfos that represent the panels that the application must have. This list corresponds to the properties of the type passed as a parameter.</returns>
@@ -77,10 +92,18 @@ namespace UISupportBlazor
                     assembly = UISupportGeneric.Util.NamespaceToAssembly(atNamespace);
                 if (assembly == null)
                 {
+                    var currentAssembly = MethodBase.GetCurrentMethod().DeclaringType.Assembly;
                     var stackTrace = new StackTrace();
-                    var method = stackTrace.GetFrame(1)?.GetMethod();
-                    var declaringType = method?.DeclaringType;
-                    assembly = declaringType.Assembly;
+                    for (int i = 0; i < stackTrace.FrameCount; i++)
+                    {
+                        var method = stackTrace.GetFrame(i)?.GetMethod();
+                        var declaringType = method?.DeclaringType;
+                        assembly = declaringType?.Assembly;
+                        if (assembly != null && assembly != currentAssembly)
+                        {
+                            break;
+                        }
+                    }
                 }
                 if (atNamespace == null)
                 {

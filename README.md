@@ -43,6 +43,10 @@ Join the countless organizations already revolutionizing their workflows and ach
 We invite you to view and test this collection of examples, they are excellent demonstration tutorials on how to create and use this powerful tool:
 [Demonstration applications (examples) and manuals](https://github.com/Andrea-Bruno/Blazor-Auto-GUI-generator-samples)
 
+## Project Template
+Among the demo tutorials you will find a project called **ProjectTemplate**, launch it and use it to create a blank template to bring your project to life! Increase your productivity dramatically!
+[Repository that also contains the template generator](https://github.com/Andrea-Bruno/Blazor-Auto-GUI-generator-samples)
+
 ## Social Impact
 The implementation of this algorithm will lead to thousands of front-end developers being replaced, with profound and potentially devastating effects on their mental well-being. This breakthrough technology renders front-end developers as obsolete as coachmen were with the advent of the automobile.
 

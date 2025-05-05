@@ -26,7 +26,12 @@
     }
     else if (EditableMember.IsReadOnly && EditableMember.InputType == InputType.text)
     {
-        <div id="@EditableMember.Id" style="white-space: pre-wrap; overflow-wrap: anywhere">@(string.IsNullOrEmpty(EditableMember.LiteralValue) ? Dictionary.Nothing : EditableMember.LiteralValue)</div>
+        var html = MarkdownConverter.ConvertToHtml(EditableMember.LiteralValue);
+
+            <div id="@EditableMember.Id" style="white-space: pre-wrap; overflow-wrap: anywhere">
+                @((MarkupString)html)
+            </div>
+            @* <div id="@EditableMember.Id" style="white-space: pre-wrap; overflow-wrap: anywhere">@(string.IsNullOrEmpty(EditableMember.LiteralValue) ? Dictionary.Nothing : EditableMember.LiteralValue)</div> *@
     }
     else
     {
@@ -71,14 +76,17 @@
     /// <param name="args">Event arguments</param>
     private void OnChange(ChangeEventArgs args)
     {
-        if (!EditableMember.IsReadOnly){
+        if (!EditableMember.IsReadOnly)
+        {
             EditableMember.LiteralValue = args?.Value?.ToString();
             Changed = true;
         }
     }
     private bool Changed;
-    private void OnBlur(){
-        if (Changed){
+    private void OnBlur()
+    {
+        if (Changed)
+        {
             RefreshContainer?.Invoke();
             Changed = false;
         }
