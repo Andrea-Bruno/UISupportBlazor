@@ -106,7 +106,7 @@ The implementation of this algorithm will lead to thousands of front-end develop
 
 ## Usage:
 
-The easiest way to start is to take as a template one of the projects used in the tutorials published in the repository: [Blazor Auto GUI Generator Samples](https://github.com/Andrea-Bruno/Blazor-Auto-GUI-generator-samples)
+The easiest way to get started is to create a basic project using the **ProjectTemplate** found here: Blazor Auto GUI Generator Samples: [Blazor Auto GUI Generator Samples](https://github.com/Andrea-Bruno/Blazor-Auto-GUI-generator-samples)
 
 Alternatively, you can also set up your own Blazor server project by following the steps below:
 
