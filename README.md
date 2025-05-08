@@ -60,11 +60,11 @@ Unlike AI-driven systems that rely on natural language prompts and model-based i
 
 #### Key Advantages Over AI-Generated APIs
 
-- **No AI Interpretation Errors** – Eliminates the risk of ambiguous prompt understanding or misconfiguration.
-- **Fully Deterministic API Generation** – Every aspect of API behavior is extracted directly from a structured application assembly, ensuring precision.
-- **Seamless Integration** – The automated process instantly generates an interactive API layer with zero manual intervention.
-- **Accelerated Development** – Developers can focus on building features instead of troubleshooting unpredictable API responses.
-- **Copyright Protection** – This highly innovative system is officially covered under a licensed copyright, securing intellectual property rights.
+- **No AI Interpretation Errors** - Eliminates the risk of ambiguous prompt understanding or misconfiguration.
+- **Fully Deterministic API Generation** - Every aspect of API behavior is extracted directly from a structured application assembly, ensuring precision.
+- **Seamless Integration** - The automated process instantly generates an interactive API layer with zero manual intervention.
+- **Accelerated Development** - Developers can focus on building features instead of troubleshooting unpredictable API responses.
+- **Copyright Protection** - This highly innovative system is officially covered under a licensed copyright, securing intellectual property rights.
 
 ### How It Works
 
