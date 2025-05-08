@@ -2,7 +2,7 @@
 
 ## Our Mission
 
-Our goal? Well, in a playful tone, we could say that we're determined to make front-end developers redundant and send them packing! 
+Our goal? Well, in a playful tone, we could say that we're determined to make front-end developers obsolete and send them packing! 
 Just like coachmen became obsolete with the invention of the automobile, front-end developers might soon find themselves searching for new career paths. Thanks to our **Deterministic AI for Automatic Front-End Generation**, manually writing user interfaces will be a thing of the past.  
 Gone are the days of endless **XAML bindings and complex integrations**, the total automation has arrived, and the revolution is here. Of course, talented front-end developers will find new ways to apply their skills, but one thing is clear: the way we build front-ends is about to change forever!
 
