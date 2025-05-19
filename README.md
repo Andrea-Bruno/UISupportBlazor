@@ -1,4 +1,4 @@
-# AI rendered GUI for Blazor
+# AI rendered GUI and auto API for Blazor
 
 ## Our Mission
 

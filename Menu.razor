@@ -81,6 +81,13 @@
         }
     }
 
-    [Inject]
     private IHttpContextAccessor? HttpContextAccessor { get; set; }
+
+    [Inject]
+    private IServiceProvider? ServiceProvider { get; set; }
+
+    protected override void OnInitialized()
+    {
+        HttpContextAccessor = (IHttpContextAccessor?)ServiceProvider?.GetService(typeof(IHttpContextAccessor));
+    }
 }

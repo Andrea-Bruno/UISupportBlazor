@@ -9,15 +9,13 @@
     <Configurations>Debug;Release</Configurations>
     <Copyright>Andrea Bruno</Copyright>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>blazor;razor,AI;automation; rapid development; code generation; GUI generation; automated design; software development; automatic user interface; assisted programming; low-code development; no-code development; dynamic framework; design tools; GUI customization; visual design; intelligent development; code optimization; rapid prototyping; AI in development; dynamic UI; development assistant; graphical interfaces; code analysis; productivity tools; software modeling; responsive design; automated workflow; drag and drop design; form generator; automatic coding; project management; developer assistant; application builder; artificial intelligence; simplified development; visual editor; template generator; process automation; layout management; assisted development; AI-driven prototyping.</PackageTags>
+    <PackageTags>blazor;razor,AI;automation; rapid development; code generation; GUI generation; automated design; software development; automatic user interface; assisted programming; low-code development; no-code development; dynamic framework; design tools; GUI customization; visual design; intelligent development; code optimization; rapid prototyping; AI in development; dynamic UI; development assistant; graphical interfaces; code analysis; productivity tools; software modeling; responsive design; automated workflow; drag and drop design; form generator; automatic coding; project management; developer assistant; application builder; artificial intelligence; simplified development; visual editor; template generator; process automation; layout management; assisted development; AI-driven prototyping;automated API creation; API automation; API development tools; API generator; API design automation; auto-generated API; API scaffold; API framework generator; API creation software; API boilerplate; API code generation; API deployment automation; AI-generated API; API integration automation</PackageTags>
     <RepositoryUrl>https://github.com/Andrea-Bruno/UISupportBlazor</RepositoryUrl>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <Description>
-      Development tool for automatic GUI creation for Blazor applications (speeds up web application development by 70% with half the staff)
-      Development environment for automatically creating the UI for Blazor applications. A powerful AI analyzer automatically creates the entire front end of the application.
-    </Description>
+    <Description>Development tool for automatic GUI and API creation for Blazor applications (speeds up web application development by 70% with half the staff).
+Development environment for automatically creating the UI and API for Blazor applications. A powerful AI analyzer automatically creates the entire front-end and API of the application.</Description>
     <Title>Automatic GUI generator for Blazor</Title>
     <PackageProjectUrl>https://github.com/Andrea-Bruno/UISupportBlazor</PackageProjectUrl>
     <PackageIcon>ai.png</PackageIcon>

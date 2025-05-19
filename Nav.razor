@@ -1,7 +1,7 @@
-﻿@inject IHttpContextAccessor? HttpContextAccessor
-@using UISupportGeneric.UI
+﻿@using UISupportGeneric.UI
 @using Microsoft.AspNetCore.Http
 @inject NavigationManager MyNavigationManager
+@inject IServiceProvider ServiceProvider
 
 @{
     if (Id == null)
@@ -59,7 +59,16 @@
     {
         InvokeAsync(StateHasChanged);
     }
+
     private ClassInfo? ClassInfo;
+    private IHttpContextAccessor? HttpContextAccessor;
+
     [Parameter]
     public string? Id { get; set; }
+
+    protected override void OnInitialized()
+    {
+        // Try to get the IHttpContextAccessor service
+        HttpContextAccessor = (IHttpContextAccessor?)ServiceProvider.GetService(typeof(IHttpContextAccessor));
+    }
 }

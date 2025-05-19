@@ -55,8 +55,13 @@ namespace UISupportBlazor
             /// </summary>
             /// <param name="context">Current HttpContext</param>
             /// <returns>Session object of current user</returns>
-            static public Session GetSession(HttpContext context)
+            static public Session? GetSession(HttpContext? context = null)
             {
+                context ??= GetCurrentHttpContext();
+                if (context == null)
+                {
+                    return null;
+                }
                 return RefreshSessionTimeOut(context);
             }
 
