@@ -219,11 +219,11 @@ namespace UISupportBlazor
             object panels;
             if (Values.TryGetValue(nameof(panels), out panels))
             {
-                if (panels is Dictionary<string, object> panelsDictipnary)
+                if (panels is Dictionary<string, object> panelsDictionary)
                 {
                     if (className == null)
                         return panels;
-                    if (panelsDictipnary.TryGetValue(className, out object? panel))
+                    if (panelsDictionary.TryGetValue(className, out object? panel))
                     {
                         if (elementName == null)
                             return panel;
@@ -253,9 +253,9 @@ namespace UISupportBlazor
             object panels;
             if (Values.TryGetValue(nameof(panels), out panels))
             {
-                if (panels is Dictionary<string, object> panelsDictipnary)
+                if (panels is Dictionary<string, object> panelsDictionary)
                 {
-                    foreach (var panel in panelsDictipnary)
+                    foreach (var panel in panelsDictionary)
                     {
                         if (panel.Value.GetType() == type)
                             return panel.Value;
@@ -263,6 +263,22 @@ namespace UISupportBlazor
                 }
             }
             return null;
+        }
+
+        private void OnSessionExpired()
+        {
+            object? classInfoList;
+            if (Values.TryGetValue(nameof(classInfoList), out classInfoList))
+            {
+                if (classInfoList is List<ClassInfo> panelsList)
+                {
+                    foreach (var panel in panelsList)
+                    {
+                        if (!panel.IsStatic)
+                            panel.IsExpired = true; // Mark the panel as expired
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -342,6 +358,7 @@ namespace UISupportBlazor
             Sessions.Expired(this);
             lock (Sessions.ActiveSessions)
             {
+                Sessions.ActiveSessions[Id].OnSessionExpired();                
                 Sessions.ActiveSessions.Remove(Id);
             }
             ExpireSessionTimer.Change(Timeout.Infinite, Timeout.Infinite);

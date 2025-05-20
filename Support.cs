@@ -146,7 +146,7 @@ namespace UISupportBlazor
                             }
                         }
                         panels = panelsDictionary;
-                        session.Values.Add(nameof(panels), panelsDictionary);
+                        session.Values.Add(nameof(panels), panelsDictionary); // The panel dictionary contains the type, for static classes, and the class instance for non-static classes.
                         session.Values.Add(nameof(classInfoList), classInfoList);
                     }
                     else if (session.Values.TryGetValue(nameof(classInfoList), out object? classInfoListObj))
