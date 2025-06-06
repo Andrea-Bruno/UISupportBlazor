@@ -74,8 +74,16 @@ namespace UISupportBlazor
                     return; // End the middleware pipeline for this request.
                 }
             }
-            // If the request does not match, pass it to the next middleware.
-            await _next(context);
+            try
+            {
+                // If the request does not match, pass it to the next middleware.
+                await _next(context);
+            }
+            catch (Exception ex)
+            {
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await context.Response.WriteAsync($"{{\"error\": \"Bad Request: {ex.Message}\"}}");
+            }
         }
     }
 }

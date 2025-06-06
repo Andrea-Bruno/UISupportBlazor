@@ -8,6 +8,7 @@
     {
         return;
     }
+    ClassInfo? ClassInfo = null;
     try
     {
         var id = new Guid(Id);
@@ -18,14 +19,15 @@
             var session = UISupportBlazor.Session.Sessions.GetSession(HttpContextAccessor.HttpContext);
 
             // Get the ClassInfo by ID
-            ClassInfo = session.GetClassInfoById(id);
+            if (session != null)
+                ClassInfo = session.GetClassInfoById(id);
             if (ClassInfo == null)
             {
                 // If ClassInfo is not found in the session, return
                 return;
             }
             // Check if ClassInfo is in the "AllowedPanels" list saved in the session
-            if (session.Values.TryGetValue("AllowedPanels", out var allowedPanelsObj) && allowedPanelsObj is List<ClassInfo> allowedPanels)
+            if (session != null && session.Values.TryGetValue("AllowedPanels", out var allowedPanelsObj) && allowedPanelsObj is List<ClassInfo> allowedPanels)
             {
                 if (!allowedPanels.Contains(ClassInfo))
                 {
@@ -47,12 +49,13 @@
     {
         // Handle exceptions (optional: add logging here)
     }
+    if (ClassInfo != null)
+    {
+        <ObjectEditor Info="@ClassInfo" InterfaceType="@InterfaceType.AutoSave" RefreshContainer="@Refresh"></ObjectEditor>
+    }
 }
 
-@if (ClassInfo != null)
-{
-    <ObjectEditor Info="@ClassInfo" InterfaceType="@InterfaceType.AutoSave" RefreshContainer="@Refresh"></ObjectEditor>
-}
+
 
 @code {
     private void Refresh()
@@ -60,7 +63,6 @@
         InvokeAsync(StateHasChanged);
     }
 
-    private ClassInfo? ClassInfo;
     private IHttpContextAccessor? HttpContextAccessor;
 
     [Parameter]
