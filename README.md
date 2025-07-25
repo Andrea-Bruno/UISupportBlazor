@@ -13,7 +13,7 @@ Discover the future of software development with our groundbreaking platform, en
 The idea behind this development system is that the programmer must focus only on the program's functionality, in practice the development focuses on the creation of a library without a graphical interface and protocols that allow the front-end to interact with the back-end. Once the back-end is compiled and the assembly is produced, an AI analyzer examines it and automatically creates the front-end with all the iteration mechanisms with it. This speeds up development considerably. The front-end is created complete with everything, including field validation mechanisms. API and iteration systems between GUI and back-end.
 In the various tutorials published, for convenience the front-end project coincides with the back-end, this to facilitate these examples, from the practical side it is possible to create a back-end project as a library (therefore without a GUI), and create separate projects for the generation of Web, Mobile and Desktop applications: We are working on 3 GUI generators that cover all the cases, in this way by writing a single back-end you will have the Web, Mobile and Desktop apps ready in one go.
 
-## Strategic Vision – Why Invest in UISupportBlazor
+## Strategic Investment Vision
 
 In the rapidly evolving landscape of digital transformation, the demand for scalable, secure, and efficient cloud-based applications has never been greater. Governments across Europe, including Italy, are investing heavily in digital infrastructure through initiatives like the National Recovery and Resilience Plan (PNRR), which allocates billions of euros to support cloud migration, interoperability, and the modernization of public services.
 At the heart of this transformation lies a unique opportunity: UISupportBlazor, a groundbreaking technology that automates the creation of web applications by analyzing backend assemblies and generating complete front-end interfaces in real time. This deterministic AI-driven platform eliminates the need for manual front-end development, dramatically accelerating time-to-market and reducing development costs by up to 70%.
@@ -315,4 +315,16 @@ You should get something like this:
 This last adjustment was made necessary because of a bug in Blazor where the ::deep directive doesn't work unless it's put first (if anyone who works on Blazor development is reading this, we suggest fixing this bug.)
 
 8) Create, in your project, the **Panel** directory in which to put the classes that represent the back-end of your project, these will act as the basis for the automatic creation of the front-end.
+
+## About the Author
+
+This project is led by Andrea Bruno, recognized as one of the pioneers in the field of artificial intelligence.
+
+In the aftermath of the legendary Kasparov–Deep Blue match, which captivated the world with the promise of machines defeating humans in domains requiring intellect, Andrea saw beyond the hype. He understood that such victories were not evidence of true intelligence, but rather brute-force algorithms exploring exhaustive combinations in pursuit of optimal outcomes.
+
+Driven by the quest for authentic intelligence, Andrea began developing a genuine AI system that moved beyond trial-and-error strategies. His groundbreaking work laid the foundation for neural network prototypes—capable of learning, adapting, and evolving—well ahead of their time.
+
+In 1999, Andrea published his revolutionary Chess AI software in *Chip Magazine*, one of the most respected computing publications, sparking widespread discussion around machine learning and the future of automation. In 2002, he advanced this work further through Russia’s *Komunalka Project*, introducing chatbots capable of holding human-like conversations and passing rudimentary Turing tests.
+
+These innovations marked the early steps toward today’s intelligent systems, and Andrea Bruno remains a visionary force shaping the way we think about machine learning, human-computer interaction, and AI ethics.
 
