@@ -11,7 +11,7 @@ namespace UISupportBlazor
     /// </summary>
     public class Session
     {
-    
+
         private static IHttpContextAccessor? _httpContextAccessor;
         /// <summary>
         /// Configures the session with the provided IHttpContextAccessor
@@ -358,8 +358,11 @@ namespace UISupportBlazor
             Sessions.Expired(this);
             lock (Sessions.ActiveSessions)
             {
-                Sessions.ActiveSessions[Id].OnSessionExpired();                
-                Sessions.ActiveSessions.Remove(Id);
+                if (Sessions.ActiveSessions.TryGetValue(Id, out Session? value))
+                {
+                    value.OnSessionExpired();
+                    Sessions.ActiveSessions.Remove(Id);
+                }
             }
             ExpireSessionTimer.Change(Timeout.Infinite, Timeout.Infinite);
             ExpireSessionTimer.Dispose();
@@ -377,7 +380,7 @@ namespace UISupportBlazor
         public dynamic Val
         {
             get
-            {    
+            {
                 return new DynamicWrapper(Values);
             }
             set
