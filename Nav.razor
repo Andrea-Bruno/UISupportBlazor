@@ -51,6 +51,14 @@
     }
     if (ClassInfo != null)
     {
+        var mdFile = ClassInfo.PathFileBase + ".md";
+        if (File.Exists(mdFile)){
+            var markdown = File.ReadAllText(mdFile);
+            var renderedMarkdown = MarkdownConverter.ConvertToHtml(markdown);
+            <div class="markdown-content">
+                @((MarkupString)renderedMarkdown)
+            </div>
+        }
         <ObjectEditor Info="@ClassInfo" InterfaceType="@InterfaceType.AutoSave" RefreshContainer="@Refresh"></ObjectEditor>
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Text;
 using System.Text.RegularExpressions;
+using static System.Net.Mime.MediaTypeNames;
 
 
 namespace UISupportBlazor
@@ -24,7 +25,7 @@ namespace UISupportBlazor
         {
             if (string.IsNullOrEmpty(markdown))
                 return string.Empty;
-
+            // markdown = System.Net.WebUtility.HtmlEncode(markdown);
             lock (_conversionLock)
             {
                 try
