@@ -22,29 +22,50 @@
     }
     else if (EditableMember.InputType == InputType.image)
     {
-        <img src="@string.Format("data:image/png;base64,{0}",   EditableMember.ImageBase64)" />
+        <img src="@string.Format("data:image/png;base64,{0}", EditableMember.ImageBase64)" />
     }
     else if (EditableMember.IsReadOnly && EditableMember.InputType == InputType.text)
     {
         var html = MarkdownConverter.ConvertToHtml(EditableMember.LiteralValue);
 
-            <div id="@EditableMember.Id" style="white-space: pre-wrap; overflow-wrap: anywhere">
-                @((MarkupString)html)
-            </div>
-            @* <div id="@EditableMember.Id" style="white-space: pre-wrap; overflow-wrap: anywhere">@(string.IsNullOrEmpty(EditableMember.LiteralValue) ? Dictionary.Nothing : EditableMember.LiteralValue)</div> *@
+        <div id="@EditableMember.Id" style="white-space: pre-wrap; overflow-wrap: anywhere">
+            @((MarkupString)html)
+        </div>
+        @* <div id="@EditableMember.Id" style="white-space: pre-wrap; overflow-wrap: anywhere">@(string.IsNullOrEmpty(EditableMember.LiteralValue) ? Dictionary.Nothing : EditableMember.LiteralValue)</div> *@
     }
     else
     {
-        var classValue = EditableMember.InputType == InputType.checkbox ? "form-check" : EditableMember.InputType == InputType.range ? "form-range" : "form-control";
+        // var classValue = EditableMember.InputType == InputType.checkbox ? "form-check" : EditableMember.InputType == InputType.range ? "form-range" : "form-control";
 
-        var attributes = new Dictionary<string, object>();
+        var attributes = new Dictionary<string, object>
+        {
+            ["id"] = EditableMember.Id,
+            ["class"] = EditableMember.InputType == InputType.checkbox ? "form-check" : EditableMember.InputType == InputType.range ? "form-range" : "form-control",
+            ["disabled"] = EditableMember.IsReadOnly,
+        };
         if (EditableMember.Min != null)
             attributes.Add("min", ((double)(EditableMember.Min)).ToString(System.Globalization.CultureInfo.InvariantCulture));
         if (EditableMember.Max != null)
             attributes.Add("max", ((double)(EditableMember.Max)).ToString(System.Globalization.CultureInfo.InvariantCulture));
         if (EditableMember.Step != null)
             attributes.Add("step", ((double)(EditableMember.Step)).ToString(System.Globalization.CultureInfo.InvariantCulture));
-        <input id="@EditableMember.Id" class="@classValue" disabled="@EditableMember.IsReadOnly" @bind-value=EditableMember.LiteralValue @oninput=OnChange @onblur=OnBlur checked="@EditableMember.IsTrue" type="@EditableMember.InputTypeText" @attributes="@attributes" />
+
+        if (EditableMember.InputType == InputType.textarea)
+        {
+            var rows = EditableMember.LiteralValue?.Count(c => c == '\n');
+            rows ??= 0;
+            rows++;
+            <textarea @attributes="@attributes" @bind=EditableMember.LiteralValue @oninput=OnChange @onblur=OnBlur rows="@rows" />        
+        }
+        else
+        {
+            attributes.Add("type", EditableMember.InputTypeText);
+            attributes.Add("checked", EditableMember.IsTrue);
+            <input @attributes="@attributes" @bind=EditableMember.LiteralValue @oninput=OnChange @onblur=OnBlur />
+        }
+
+
+        @* <input id="@EditableMember.Id" class="@classValue" disabled="@EditableMember.IsReadOnly" @bind-value=EditableMember.LiteralValue @oninput=OnChange @onblur=OnBlur checked="@EditableMember.IsTrue" type="@EditableMember.InputTypeText" @attributes="@attributes" /> *@
         if (EditableMember.InputType == InputType.range)
         {
             <output class="form-control">@EditableMember.LiteralValue</output>
