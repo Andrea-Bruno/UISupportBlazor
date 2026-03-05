@@ -116,42 +116,46 @@ namespace UISupportBlazor
                 lock (httpContext)
                 {
                     var classes = assembly.GetTypes().Where(t => t.Namespace == atNamespace && t.IsClass && t.IsPublic);
-
-
                     var session = Session.Sessions.GetSession(httpContext);
                     object panels;
-                    if (!session.Values.TryGetValue(nameof(panels), out panels))
+                    if (session != null)
                     {
-
-                        var panelsDictionary = new Dictionary<string, object>();
-                        classInfoList = [];
-
-                        foreach (var type in classes)
+                        lock (session)
                         {
-                            if (UISupportGeneric.Util.IsStaticClass(type))
+                            if (!session.Values.TryGetValue(nameof(panels), out panels))
                             {
-                                panelsDictionary.Add(type.Name, type);
-                                var classInfo = UISupportGeneric.Util.GetClassInfo(type);
-                                classInfoList.Add(classInfo);
-                            }
-                            else if (type.GetConstructor(Type.EmptyTypes) != null)
-                            {
-                                var panel = Activator.CreateInstance(type);
-                                if (panel != null)
+
+                                var panelsDictionary = new Dictionary<string, object>();
+                                classInfoList = [];
+
+                                foreach (var type in classes)
                                 {
-                                    panelsDictionary.Add(type.Name, panel);
-                                    var classInfo = UISupportGeneric.Util.GetClassInfo(panel);
-                                    classInfoList.Add(classInfo);
+                                    if (UISupportGeneric.Util.IsStaticClass(type))
+                                    {
+                                        panelsDictionary.Add(type.Name, type);
+                                        var classInfo = UISupportGeneric.Util.GetClassInfo(type);
+                                        classInfoList.Add(classInfo);
+                                    }
+                                    else if (type.GetConstructor(Type.EmptyTypes) != null)
+                                    {
+                                        var panel = Activator.CreateInstance(type);
+                                        if (panel != null)
+                                        {
+                                            panelsDictionary.Add(type.Name, panel);
+                                            var classInfo = UISupportGeneric.Util.GetClassInfo(panel);
+                                            classInfoList.Add(classInfo);
+                                        }
+                                    }
                                 }
+                                panels = panelsDictionary;
+                                session.Values.Add(nameof(panels), panelsDictionary); // The panel dictionary contains the type, for static classes, and the class instance for non-static classes.
+                                session.Values.Add(nameof(classInfoList), classInfoList);
+                            }
+                            else if (session.Values.TryGetValue(nameof(classInfoList), out object? classInfoListObj))
+                            {
+                                return (List<ClassInfo>)classInfoListObj;
                             }
                         }
-                        panels = panelsDictionary;
-                        session.Values.Add(nameof(panels), panelsDictionary); // The panel dictionary contains the type, for static classes, and the class instance for non-static classes.
-                        session.Values.Add(nameof(classInfoList), classInfoList);
-                    }
-                    else if (session.Values.TryGetValue(nameof(classInfoList), out object? classInfoListObj))
-                    {
-                        return (List<ClassInfo>)classInfoListObj;
                     }
                 }
             }
