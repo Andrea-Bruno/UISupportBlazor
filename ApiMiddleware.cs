@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
 
 
 namespace UISupportBlazor
@@ -16,6 +19,9 @@ namespace UISupportBlazor
         // The type containing the set of API commands to execute.
         private Type _apiCommandSet;
 
+        // And the RSA ApiPubblicKey field of _apiCommandSet if set
+        private string? _apiPubblicKey;
+
         // The API endpoint path.
         private readonly string _apiPath;
 
@@ -25,12 +31,14 @@ namespace UISupportBlazor
         /// <param name="next">The next middleware in the pipeline.</param>
         /// <param name="apiCommandSet">The type containing the API commands to execute.</param>
         /// <param name="apiPath">The path where the middleware should intercept POST requests.</param>
-        public ApiMiddleware(RequestDelegate next, Type apiCommandSet, string? apiPath = "/api")
+        /// <param name="apiPubblicKey"></param>
+        public ApiMiddleware(RequestDelegate next, Type apiCommandSet, string? apiPubblicKey = null, string? apiPath = "/api")
         {
             if (apiPath?.StartsWith("/") != true)
                 apiPath = "/" + apiPath; // Ensure the path starts with a "/".
             _apiCommandSet = apiCommandSet;
-            _next = next;
+            _apiPubblicKey = String.IsNullOrEmpty(apiPubblicKey) ? null : apiPubblicKey;
+            _apiPubblicKey ??=  apiCommandSet.GetField("ApiPubblicKey", BindingFlags.Public | BindingFlags.Static)?.GetValue(null) as string; _next = next;
             _apiPath = apiPath ?? "/api"; // Ensure default path if none is provided.
         }
 
@@ -49,13 +57,90 @@ namespace UISupportBlazor
             {
                 if (context.Request.Method == HttpMethods.Post)
                 {
+
+
                     var segments = context.Request.Path.Value.Split('/');
                     var methodName = segments.Length > 2 ? segments[2] : null;
 
                     // Read the request body as a string.
                     using var reader = new StreamReader(context.Request.Body);
                     var requestBody = await reader.ReadToEndAsync();
+                    using JsonDocument doc = JsonDocument.Parse(requestBody);
+                    var methodInfo = UISupportGeneric.API.GetMethodInfo(doc, methodName, _apiCommandSet);
+                    if (!String.IsNullOrEmpty(_apiPubblicKey) && methodInfo?.GetCustomAttribute<IsPubblicAPIAttribute>() == null)
+                    {
+                        // Validate the digital signature in the request header
+                        if (!context.Request.Headers.TryGetValue("X-Signature", out var signatureHeader) || string.IsNullOrEmpty(signatureHeader))
+                        {
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            await context.Response.WriteAsync("{\"error\": \"Missing digital signature\"}");
+                            return;
+                        }
 
+                        try
+                        {
+                            // Convert signature from Base64
+                            var signature = Convert.FromBase64String(signatureHeader!);
+
+                            // Convert request body to bytes
+                            var data = System.Text.Encoding.UTF8.GetBytes(requestBody);
+
+                            // Import RSA public key and verify signature
+                            using var rsa = System.Security.Cryptography.RSA.Create();
+                            rsa.ImportFromPem(_apiPubblicKey);
+
+                            bool isValid = rsa.VerifyData(data, signature,
+                                System.Security.Cryptography.HashAlgorithmName.SHA256,
+                                System.Security.Cryptography.RSASignaturePadding.Pkcs1);
+
+                            if (!isValid)
+                            {
+                                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                                await context.Response.WriteAsync("{\"error\": \"Invalid digital signature\"}");
+                                return;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            await context.Response.WriteAsync($"{{\"error\": \"Signature verification failed: {ex.Message}\"}}");
+                            return;
+                        }
+
+                        // Validate timestamp to prevent replay attacks
+                        if (!doc.RootElement.TryGetProperty("timestamp", out var timestampElement))
+                        {
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            await context.Response.WriteAsync("{\"error\": \"Missing timestamp in request\"}");
+                            return;
+                        }
+
+                        long requestTimestamp;
+                        try
+                        {
+                            requestTimestamp = timestampElement.GetInt64();
+                        }
+                        catch
+                        {
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            await context.Response.WriteAsync("{\"error\": \"Invalid timestamp format\"}");
+                            return;
+                        }
+
+                        var serverTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                        var timeDifference = Math.Abs(serverTimestamp - requestTimestamp);
+                        const int maxTimeDifferenceSeconds = 300; // 5 minutes tolerance
+
+                        if (timeDifference > maxTimeDifferenceSeconds)
+                        {
+                            var errorMessage = requestTimestamp > serverTimestamp
+                                ? $"{{\"error\": \"Request timestamp is in the future. Check client system clock. Time difference: {timeDifference} seconds\"}}"
+                                : $"{{\"error\": \"Request timestamp is too old (possible replay attack). Time difference: {timeDifference} seconds. Max allowed: {maxTimeDifferenceSeconds} seconds\"}}";
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            await context.Response.WriteAsync(errorMessage);
+                            return;
+                        }
+                    }
                     // Set the response content type to JSON.
                     context.Response.ContentType = "application/json";
 
