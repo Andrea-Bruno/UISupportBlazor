@@ -46,7 +46,7 @@ In scenarios where generative AI's flexibility and creativity provide value, tha
 
 Automatic GUI (front-end) generator for Blazor. A powerful analyzer automatically creates the front-end with all panels and user interaction fields, analyzes the code in the back-end and automates all the client-side development work
 
-![Back-end and front-end developing](https://raw.githubusercontent.com/Andrea-Bruno/UISupportBlazor/master/front-end_and_back-end_memes.jpg)
+![Back-end and front-end developing](https://raw.githubusercontent.com/Graphene-Lab/UISupportBlazor/master/front-end_and_back-end_memes.jpg)
 
 _Save time and pain by automating front-end development._
 
@@ -127,20 +127,20 @@ By eliminating unnecessary complexity, this technology accelerates software deve
 
 ## Samples & Manual
 We invite you to view and test this collection of examples, they are excellent demonstration tutorials on how to create and use this powerful tool:
-[Demonstration applications (examples) and manuals](https://github.com/Andrea-Bruno/Blazor-Auto-GUI-generator-samples)
+[Demonstration applications (examples) and manuals](https://github.com/Graphene-Lab/Blazor-Auto-GUI-generator-samples)
 
 ## Project Template
 Among the demo tutorials you will find a project called **ProjectTemplate**, launch it and use it to create a blank template to bring your project to life! Increase your productivity dramatically!
-[Repository that also contains the template generator](https://github.com/Andrea-Bruno/Blazor-Auto-GUI-generator-samples)
+[Repository that also contains the template generator](https://github.com/Graphene-Lab/Blazor-Auto-GUI-generator-samples)
 
 ## Social Impact
 The implementation of this algorithm will lead to thousands of front-end developers being replaced, with profound and potentially devastating effects on their mental well-being. This breakthrough technology renders front-end developers as obsolete as coachmen were with the advent of the automobile.
 
-![Front-end Developer Replaced by New Technology Seeks Job](https://raw.githubusercontent.com/Andrea-Bruno/UISupportBlazor/master/front-end_developer.jpg)
+![Front-end Developer Replaced by New Technology Seeks Job](https://raw.githubusercontent.com/Graphene-Lab/UISupportBlazor/master/front-end_developer.jpg)
 
 ## Usage:
 
-The easiest way to get started is to create a basic project using the **ProjectTemplate** found here: Blazor Auto GUI Generator Samples: [Blazor Auto GUI Generator Samples](https://github.com/Andrea-Bruno/Blazor-Auto-GUI-generator-samples)
+The easiest way to get started is to create a basic project using the **ProjectTemplate** found here: Blazor Auto GUI Generator Samples: [Blazor Auto GUI Generator Samples](https://github.com/Graphene-Lab/Blazor-Auto-GUI-generator-samples)
 
 Alternatively, you can also set up your own Blazor server project by following the steps below:
 
